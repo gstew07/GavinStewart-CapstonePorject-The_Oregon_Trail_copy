@@ -6,12 +6,12 @@
 // - describe what you did to take this project "above and beyond"
 
 let mainBackground, font;
-let titleFade = 1, startFade = 255;
-let cTime = 5; // Current "noise" time
-let cInterval = 0.05;
+let titleFade = 1, startFade = 0, startFadeTime = 0;
+let screenCode = 0, backgroundPos = 0, totalChange, position = 0;
 
 function preload(){
   mainBackground = loadImage("assets/mainBackground.jpg");
+  mountains = loadImage("assets/mountains.jpg");
   font = loadFont("assets/pixelFont.ttf");
 }
 
@@ -23,12 +23,15 @@ function setup() {
 
 function draw() {
   background(220);
-  titleScreen();
+  if(screenCode === 0) titleScreen();
+  if(screenCode === 1) startVillage();
+
 }
 
 function titleScreen(){
   background(mainBackground);
   titleFade += 3.5;
+  
   textSize(70);
   textStyle(BOLD);
   fill(0, 0, 0, titleFade);
@@ -36,11 +39,52 @@ function titleScreen(){
 
   fill(24, 192, 47, titleFade);
   text("The Oregon Trail", width/2, height/8);
+  if(titleFade > 300){
+    if(startFadeTime === 0 && startFade < 1){
+      startFade += 0.02;
+    }
+    else if(startFadeTime === 0){
+      startFadeTime = 1;
+    }
+    if(startFadeTime === 1 && startFade > 0){
+      startFade -= 0.02;
+    }
+    else if(startFadeTime === 1){
+      startFadeTime = 0;
+    }
 
-  textSize(60);
-  fill(255);
-  text("PRESS SPACE TO START", width/2, 3*height/4, startFade);
-  
+    print(startFade);
 
+    let fade = map(startFade, 0, 1, 0, 255);
+
+    textSize(60);
+    fill(255, 255, 255, fade);
+    text("PRESS SPACE TO START", width/2, 3*height/4);
+    if(keyIsPressed && key === " "){
+      screenCode = 1;
+      backgroundPos = -10*width;
+      totalChange = 0;
+    }
+    
+  }
+}
+
+function startVillage(){
+  rotateBackground1(mountains, 5);
   
+}
+
+function rotateBackground1(image1, rate){
+  position += backgroundPos;
+  rotateBackground2(image1, position);
+  position += rate;
+  totalChange += rate;
+}
+
+function rotateBackground2(image1, xPosition){
+  if(xPosition <= totalChange){
+    image(image1, xPosition, 0, width, height);
+    
+    rotateBackground2(image1, xPosition + width);
+  }
 }
