@@ -12,6 +12,7 @@ let screenCode = 0, backgroundPos = 0, totalChange, position = 0;
 function preload(){
   mainBackground = loadImage("assets/mainBackground.jpg");
   mountains = loadImage("assets/mountains.jpg");
+  inverseMountains = loadImage("assets/mountains2.jpg");
   font = loadFont("assets/pixelFont.ttf");
 }
 
@@ -53,8 +54,6 @@ function titleScreen(){
       startFadeTime = 0;
     }
 
-    print(startFade);
-
     let fade = map(startFade, 0, 1, 0, 255);
 
     textSize(60);
@@ -64,27 +63,34 @@ function titleScreen(){
       screenCode = 1;
       backgroundPos = -10*width;
       totalChange = 0;
+      position += backgroundPos;
     }
     
   }
 }
 
 function startVillage(){
-  rotateBackground1(mountains, 5);
+  rotateBackground1(mountains, inverseMountains, 5);
   
 }
 
-function rotateBackground1(image1, rate){
-  position += backgroundPos;
-  rotateBackground2(image1, position);
-  position += rate;
-  totalChange += rate;
+function rotateBackground1(image1, image2, rate){
+  rotateBackground2(image1, image2, position, 1);
+  if(position <= 0 - rate){
+    position += rate;
+    totalChange += rate;
+  }
 }
 
-function rotateBackground2(image1, xPosition){
+function rotateBackground2(image1, image2, xPosition, direction){
   if(xPosition <= totalChange){
-    image(image1, xPosition, 0, width, height);
+    if(direction === 1){
+      image(image1, xPosition, 0, width, height);
+    }
+    else if(direction === -1){
+      image(image2, xPosition, 0, width, height);
+    }
     
-    rotateBackground2(image1, xPosition + width);
+    rotateBackground2(image1, xPosition + width, direction*-1);
   }
 }
