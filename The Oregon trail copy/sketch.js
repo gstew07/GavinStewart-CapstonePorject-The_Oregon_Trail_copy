@@ -7,7 +7,7 @@
 
 let mainBackground, font;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
-let screenCode = 0, backgroundPos = 0, totalChange, position = 0;
+let screenCode = 0, backgroundPos = 0, totalChange, groundChange, position = 0;
 
 function preload() {
   mainBackground = loadImage("assets/mainBackground.jpg");
@@ -65,6 +65,7 @@ function titleScreen() {
       backgroundPos = -(5 * 2) * width;
       position += backgroundPos;
       totalChange = 0;
+      groundChange = 2*position;
 
     }
 
@@ -72,31 +73,39 @@ function titleScreen() {
 }
 
 function startVillage() {
-  rotateBackground1(mountains, inverseMountains, grassGround, 5);
+  rotateBackground1(mountains, inverseMountains, grassGround, 2);
 
 }
 
 function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolling background
 
-  rotateBackground2(image1, image2, image3,  position, 1);
+  rotateBackground2(image1, image2, image3, position, groundChange, 1);
   if (position <= 0 - rate) {
     position += rate;
     totalChange += rate;
+    groundChange += 2*rate;
   }
 }
 
-function rotateBackground2(image1, image2, image3, xPosition, direction) {// uses two images and reccurssion to scroll the background
-  if (xPosition <= totalChange) {
-    if (direction === 1) {
-      image(image1, xPosition, 0, width, height);
-
+function rotateBackground2(image1, image2, image3, xPosition, ground, direction) {// uses two images and reccurssion to scroll the background
+  if (ground <= 2*totalChange) {
+    if(xPosition <= totalChange){
+      if (direction === 1) {
+        image(image1, xPosition, 0, width, 6*height/7);
+  
+      }
+      else if (direction === -1) {
+        image(image2, xPosition, 0, width, 6*height/7);
+  
+      }
     }
-    else if (direction === -1) {
-      image(image2, xPosition, 0, width, height);
-
+    
+    for(let i = 0; i < 2; i++){
+      image(image3, ground + i*width/2, 4*height/5, width/2, height/5);
     }
-    image(image3, xPosition, 9*height/10, width, 9*height/10);
-    rotateBackground2(image1, image2, image3, xPosition + width, direction * -1);
+    
+    
+    rotateBackground2(image1, image2, image3, xPosition + width, ground + width, direction * -1);
 
 
 
