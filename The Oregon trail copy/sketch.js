@@ -8,6 +8,7 @@
 let mainBackground, font;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
 let screenCode = 0, backgroundPos = 0, totalChange, groundChange, position = 0;
+let wagon = [], changeWagon = 0;
 
 function preload() {
   mainBackground = loadImage("assets/mainBackground.jpg");
@@ -15,6 +16,9 @@ function preload() {
   inverseMountains = loadImage("assets/mountains2.jpg");
   grassGround = loadImage("assets/grassGround.png");
   font = loadFont("assets/pixelFont.ttf");
+  for(let i = 1; i < 6; i++){
+    wagon.push(loadImage("assets/Wagon"+i+".png"));
+  }
 }
 
 function setup() {
@@ -75,6 +79,11 @@ function titleScreen() {
 function startVillage() {
   rotateBackground1(mountains, inverseMountains, grassGround, 2);
 
+  drawWagon(4*width/5, changeWagon);
+  changeWagon += 1;
+  if(changeWagon > 4){
+    changeWagon = 0;
+  }
 }
 
 function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolling background
@@ -91,17 +100,17 @@ function rotateBackground2(image1, image2, image3, xPosition, ground, direction)
   if (ground <= 2*totalChange) {
     if(xPosition <= totalChange){
       if (direction === 1) {
-        image(image1, xPosition, 0, width, 6*height/7);
+        image(image1, xPosition, 0, width, height);
   
       }
       else if (direction === -1) {
-        image(image2, xPosition, 0, width, 6*height/7);
+        image(image2, xPosition, 0, width, height);
   
       }
     }
     
     for(let i = 0; i < 2; i++){
-      image(image3, ground + i*width/2, 4*height/5, width/2, height/5);
+      image(image3, ground + i*width/2, 6*height/7, width/2, height/7);
     }
     
     
@@ -110,4 +119,8 @@ function rotateBackground2(image1, image2, image3, xPosition, ground, direction)
 
 
   }
+}
+
+function drawWagon(x, change){
+  image(wagon[change], x, 6*height/7 - 40);
 }
