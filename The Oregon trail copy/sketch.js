@@ -16,8 +16,8 @@ function preload() {
   inverseMountains = loadImage("assets/mountains2.jpg");
   grassGround = loadImage("assets/grassGround.png");
   font = loadFont("assets/pixelFont.ttf");
-  for(let i = 1; i < 6; i++){
-    wagon.push(loadImage("assets/Wagon"+i+".png"));
+  for (let i = 1; i < 6; i++) {
+    wagon.push(loadImage("assets/Wagon" + i + ".png"));
   }
 }
 
@@ -69,7 +69,7 @@ function titleScreen() {
       backgroundPos = -(5 * 2) * width;
       position += backgroundPos;
       totalChange = 0;
-      groundChange = 2*position;
+      groundChange = 2 * position;
 
     }
 
@@ -79,11 +79,8 @@ function titleScreen() {
 function startVillage() {
   rotateBackground1(mountains, inverseMountains, grassGround, 2);
 
-  drawWagon(4*width/5, changeWagon);
-  changeWagon += 1;
-  if(changeWagon > 4){
-    changeWagon = 0;
-  }
+  
+
 }
 
 function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolling background
@@ -92,28 +89,44 @@ function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolli
   if (position <= 0 - rate) {
     position += rate;
     totalChange += rate;
-    groundChange += 2*rate;
+    groundChange += 2 * rate;
+  }
+
+  drawWagon(3 * width / 5, changeWagon);
+
+  if (position <= 0 - rate) {
+    if (frameCount % 6 === 0) {
+      changeWagon += 1;
+      if (changeWagon > 4) {
+        changeWagon = 0;
+      }
+    }
+  }
+  else {
+    changeWagon = 0;
   }
 }
 
 function rotateBackground2(image1, image2, image3, xPosition, ground, direction) {// uses two images and reccurssion to scroll the background
-  if (ground <= 2*totalChange) {
-    if(xPosition <= totalChange){
+  if (ground <= 2 * totalChange) {
+    if (xPosition <= totalChange) {
       if (direction === 1) {
         image(image1, xPosition, 0, width, height);
-  
+
       }
       else if (direction === -1) {
         image(image2, xPosition, 0, width, height);
-  
+
       }
     }
-    
-    for(let i = 0; i < 2; i++){
-      image(image3, ground + i*width/2, 6*height/7, width/2, height/7);
+
+
+
+    for (let i = 0; i < 2; i++) {
+      image(image3, ground + i * width / 2, 6 * height / 7, width / 2, height / 7);
     }
-    
-    
+
+
     rotateBackground2(image1, image2, image3, xPosition + width, ground + width, direction * -1);
 
 
@@ -121,6 +134,6 @@ function rotateBackground2(image1, image2, image3, xPosition, ground, direction)
   }
 }
 
-function drawWagon(x, change){
-  image(wagon[change], x, 6*height/7 - 40);
+function drawWagon(x, change) {
+  image(wagon[change], x, 6 * height / 7 - 260, 540, 360);
 }
