@@ -77,7 +77,7 @@ function titleScreen() {
 }
 
 function startVillage() {
-  rotateBackground1(mountains, inverseMountains, grassGround, 2);
+  rotateBackground1(mountains, inverseMountains, grassGround, 10);
 
   
 
@@ -95,7 +95,7 @@ function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolli
   drawWagon(3 * width / 5, changeWagon);
 
   if (position <= 0 - rate) {
-    if (frameCount % 6 === 0) {
+    if (frameCount % (rate*4) === 0) {
       changeWagon += 1;
       if (changeWagon > 4) {
         changeWagon = 0;
