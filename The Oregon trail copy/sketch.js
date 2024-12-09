@@ -7,7 +7,7 @@
 
 let mainBackground, font;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
-let screenCode = 0, backgroundPos = 0, totalChange, groundChange, position = 0;
+let screenCode = 2, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
 
 function preload() {
@@ -31,6 +31,7 @@ function draw() {
   background(220);
   if (screenCode === 0) titleScreen();
   if (screenCode === 1) startVillage();
+  if (screenCode === 2) huntingGame();
 
 }
 
@@ -77,7 +78,7 @@ function titleScreen() {
 }
 
 function startVillage() {
-  rotateBackground1(mountains, inverseMountains, grassGround, 10);
+  rotateBackground1(mountains, inverseMountains, grassGround, 2);
 
   
 
@@ -95,7 +96,7 @@ function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolli
   drawWagon(3 * width / 5, changeWagon);
 
   if (position <= 0 - rate) {
-    if (frameCount % (rate*4) === 0) {
+    if (frameCount % int(8/(rate/2)) === 0) {
       changeWagon += 1;
       if (changeWagon > 4) {
         changeWagon = 0;
@@ -136,4 +137,8 @@ function rotateBackground2(image1, image2, image3, xPosition, ground, direction)
 
 function drawWagon(x, change) {
   image(wagon[change], x, 6 * height / 7 - 260, 540, 360);
+}
+
+function huntingGame(){
+  background(17, 150, 28);
 }
