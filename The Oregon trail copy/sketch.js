@@ -9,6 +9,10 @@ let mainBackground, font;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
 let screenCode = 2, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
+let deerImages = [];
+
+let cTime = 5; 
+let cInterval = 0.05;
 
 function preload() {
   mainBackground = loadImage("assets/mainBackground.jpg");
@@ -140,5 +144,7 @@ function drawWagon(x, change) {
 }
 
 function huntingGame(){
+  imageMode(CENTER);
   background(17, 150, 28);
 }
+
