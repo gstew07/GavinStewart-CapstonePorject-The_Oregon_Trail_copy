@@ -9,10 +9,14 @@ let mainBackground, font;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
 let screenCode = 2, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
-let deerImages = [];
 
 let cTime = 5; 
 let cInterval = 0.05;
+let deadDeer, deerMovement, deerTime = 0;
+let deerImages = [];
+let deers = [];
+let deerLoaded = false;
+
 
 function preload() {
   mainBackground = loadImage("assets/mainBackground.jpg");
@@ -23,6 +27,17 @@ function preload() {
   for (let i = 1; i < 6; i++) {
     wagon.push(loadImage("assets/Wagon" + i + ".png"));
   }
+
+  deadDeer = loadImage("assets/deadDeer.png");
+  for(let i = 1; i < 7; i++){
+    deerImages.push(loadImage("assets/Deer"+i+".png"));
+    
+  }
+  
+  for(let i = 1; i < 7; i++){
+    deerImages.push(loadImage("assets/Deer"+i+"left.png"));
+  }
+  deerLoaded = true;
 }
 
 function setup() {
@@ -146,5 +161,32 @@ function drawWagon(x, change) {
 function huntingGame(){
   imageMode(CENTER);
   background(17, 150, 28);
+  // loadDeer();
+  // if(deerLoaded){
+  addDeer();
+  
+  
+}
+function loadDeer(){
+  print(0);
+}
+
+function addDeer(){
+  
+  if(deerTime % (5*60)){
+    let numOfDeers = int(random(1,4));
+    for(let i = 0; i < numOfDeers; i++){
+      deers.push(new Deer(random(10, width-10), random(10, height-10), random(2,5)));
+    }
+  }
+  
+  for( let d of deers ){
+    d.directionSet();
+    d.move();
+    d.display();
+    print("hi");
+  }
+
+  deerTime += 1;
 }
 
