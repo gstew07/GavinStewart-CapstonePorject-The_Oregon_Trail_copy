@@ -3,10 +3,33 @@
 
 
 class Deer{
-  constructor(x, y, speed){
+  constructor(x, y, speed, deerMovement){
     this.x = x;
     this.y = y;
     this.speed = speed;
+    this.image = deerImages[0];
+    this.xChange = 0;
+    this.yChange = 0;
+    this.rotate = 0;
+
+    this.deerMovement = deerMovement;
+
+    if(x < width/2){
+      if(y < height/2){
+        this.direction = 1;
+      }
+      else if(y >= height/2){
+        this.direction = 4;
+      }
+    }
+    if(x >= width/2){
+      if(y < height/2){
+        this.direction = 2;
+      }
+      else if(y >= height/2){
+        this.direction = 3;
+      }
+    }
     
   }
 
@@ -18,18 +41,22 @@ class Deer{
     case 1:
       this.x += this.xChange;
       this.y += this.yChange;
+      this.rotate = atan(this.yChange/this.xChange);
       break;
     case 2:
       this.x += -this.xChange;
       this.y += this.yChange;
+      this.rotate = -atan(this.yChange/this.xChange);
       break;
     case 3:
       this.x += -this.xChange;
       this.y += -this.yChange;
+      this.rotate = atan(this.yChange/this.xChange);
       break;
     case 4:
       this.x += this.xChange;
       this.y += -this.yChange;
+      this.rotate = -atan(this.yChange/this.xChange);
       break;
         
     }
@@ -38,41 +65,33 @@ class Deer{
   }
 
   directionSet(){
-    if(this.x < width/2){
-      if(this.y < height/2){
-        this.direction = 1;
+    if(deerTime % 12 === 0){
+      
+  
+      if(this.direction === 2 || this.direction === 3){
+        if(this.deerMovement < 9 || this.deerMovement > 11){
+          this.deerMovement = 9;
+        }
+        this.image = deerImages[this.deerMovement];
+        this.deerMovement += 1;
       }
-      if(this.y >= height/2){
-        this.direction = 4;
+      if(this.direction === 1 || this.direction === 4){
+        if(this.deerMovement < 3 || this.deerMovement > 5){
+          this.deerMovement = 3;
+        }
+        this.image = deerImages[this.deerMovement];
+        this.deerMovement += 1;
       }
     }
-    if(this.x >= width/2){
-      if(this.y < height/2){
-        this.direction = 2;
-      }
-      if(this.y >= height/2){
-        this.direction = 3;
-      }
-    }
-
-    if(this.xChange<0){
-      if(deerMovement < 10 || deerMovement > 12){
-        deerMovement = 10;
-      }
-      this.image = deerImages[deerMovement];
-      deerMovement += 1;
-    }
-    if(this.xChange>=0){
-      if(deerMovement < 4 || deerMovement > 6){
-        deerMovement = 4;
-      }
-      this.image = deerImages[deerMovement];
-      deerMovement += 1;
-    }
+    
   }
 
   display(){
-    image(this.image, this.x, this.y, 60, 40);
+    push();
+    translate(this.x, this.y);
+    rotate(this.rotate);
+    image(this.image, 0, 0, 120, 80);
+    pop();
   }
 
   action(){

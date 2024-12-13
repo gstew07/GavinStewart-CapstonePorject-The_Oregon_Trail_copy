@@ -11,8 +11,8 @@ let screenCode = 2, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
 
 let cTime = 5; 
-let cInterval = 0.05;
-let deadDeer, deerMovement, deerTime = 0;
+let cInterval = 0.001;
+let deadDeer, deerMovement = 0, deerTime = 0;
 let deerImages = [];
 let deers = [];
 let deerLoaded = false;
@@ -44,6 +44,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   textFont(font);
   textAlign(CENTER, CENTER);
+  angleMode(DEGREES);
 }
 
 function draw() {
@@ -164,6 +165,12 @@ function huntingGame(){
   // loadDeer();
   // if(deerLoaded){
   addDeer();
+  // let i = deerTime % 12;
+  // image(deerImages[i], width/2, height/2);
+  // if(frameCount % 60 === 0){
+  //   deerTime += 1;
+  // }
+  
   
   
 }
@@ -173,18 +180,18 @@ function loadDeer(){
 
 function addDeer(){
   
-  if(deerTime % (5*60)){
+  if(deerTime % (5*60) === 0){
     let numOfDeers = int(random(1,4));
     for(let i = 0; i < numOfDeers; i++){
-      deers.push(new Deer(random(10, width-10), random(10, height-10), random(2,5)));
+      deers.push(new Deer(random(10, width-10), random(10, height-10), int(random(2,5)), deerMovement));
     }
   }
   
   for( let d of deers ){
-    d.directionSet();
     d.move();
+    d.directionSet();
+    
     d.display();
-    print("hi");
   }
 
   deerTime += 1;
