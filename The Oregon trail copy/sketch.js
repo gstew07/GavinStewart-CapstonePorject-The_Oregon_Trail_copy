@@ -11,11 +11,12 @@ let screenCode = 2, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
 
 let cTime = 5; 
-let cInterval = 0.001;
+let cInterval = 0.002;
 let deadDeer, deerMovement = 0, deerTime = 0;
 let deerImages = [];
 let deers = [];
 let deerLoaded = false;
+let hunter;
 
 
 function preload() {
@@ -29,13 +30,13 @@ function preload() {
   }
 
   deadDeer = loadImage("assets/deadDeer.png");
-  for(let i = 1; i < 7; i++){
-    deerImages.push(loadImage("assets/Deer"+i+".png"));
+  for(let i = 1; i < 6; i++){
+    deerImages.push(loadImage("assets/nDeerDown"+i+".png"));
     
   }
   
-  for(let i = 1; i < 7; i++){
-    deerImages.push(loadImage("assets/Deer"+i+"left.png"));
+  for(let i = 1; i < 6; i++){
+    deerImages.push(loadImage("assets/nDeerUp"+i+".png"));
   }
   deerLoaded = true;
 }
@@ -170,6 +171,9 @@ function huntingGame(){
   // if(frameCount % 60 === 0){
   //   deerTime += 1;
   // }
+  hunter = new Hunter(width/2, height/2);
+  hunter.display();
+
   
   
   

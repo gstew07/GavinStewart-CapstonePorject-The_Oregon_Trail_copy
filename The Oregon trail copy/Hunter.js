@@ -1,8 +1,20 @@
 class Hunter{
-  constructor(x, y, rotation){
+  constructor(x, y){
     this.x = x;
     this.y = y;
-    this.rotation = rotation;
   }
+  display(){
+    push();
+    translate(this.x, this.y);
+    if(mouseY <= this.y){
+      rotate(-atan((mouseX - this.x)/ (mouseY-this.y)));
+    }
+    else if( mouseY > this.y){
+      rotate(-atan((mouseX - this.x)/ (mouseY-this.y)) + 180);
+    }
     
+    fill(255);
+    triangle(0, -20, -20, 20, 20, 20);
+    pop();
+  }
 }
