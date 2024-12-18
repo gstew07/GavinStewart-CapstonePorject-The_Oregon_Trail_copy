@@ -16,7 +16,7 @@ let deadDeer, deerMovement = 0, deerTime = 0;
 let deerImages = [];
 let deers = [];
 let deerLoaded = false;
-let hunter;
+let hunter, bullets = [];
 
 
 function preload() {
@@ -42,10 +42,11 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(1900, 1000);
   textFont(font);
   textAlign(CENTER, CENTER);
   angleMode(DEGREES);
+  print(width, height);
 }
 
 function draw() {
@@ -163,23 +164,20 @@ function drawWagon(x, change) {
 function huntingGame(){
   imageMode(CENTER);
   background(17, 150, 28);
-  // loadDeer();
-  // if(deerLoaded){
+
   addDeer();
-  // let i = deerTime % 12;
-  // image(deerImages[i], width/2, height/2);
-  // if(frameCount % 60 === 0){
-  //   deerTime += 1;
-  // }
+
   hunter = new Hunter(width/2, height/2);
   hunter.display();
 
+  for(let b of bullets){
+    b.display();
+    b.move();
+
+    b.hit();
+  }
   
   
-  
-}
-function loadDeer(){
-  print(0);
 }
 
 function addDeer(){
@@ -192,12 +190,24 @@ function addDeer(){
   }
   
   for( let d of deers ){
-    d.move();
-    d.directionSet();
+    if(d.direction > 0){
+      d.move();
+      d.directionSet();
+    }
+    
     
     d.display();
+    // print(d);
+    
   }
 
   deerTime += 1;
+}
+function deerDead(x, y){
+  image(deadDeer, x, y);
+}
+
+function mouseClicked(){
+  hunter.action();
 }
 

@@ -7,14 +7,20 @@ class Deer{
     this.x = x;
     this.y = y;
     this.speed = speed;
+
     this.image = deerImages[0];
+
     this.xChange = 0;
     this.yChange = 0;
+
     this.rotate = 0;
+
     this.cTime = random(0, 100000);
     this.cInterval = cInterval;
 
     this.deerMovement = deerMovement;
+
+    this.deadTimer = 0;
 
     if(x < width/2){
       if(y < height/2){
@@ -76,6 +82,8 @@ class Deer{
         }
         this.image = deerImages[this.deerMovement];
         this.deerMovement += 1;
+
+        
       }
       if(this.direction === 3 || this.direction === 4){
         if(this.deerMovement < 6 || this.deerMovement > 9){
@@ -83,14 +91,19 @@ class Deer{
         }
         this.image = deerImages[this.deerMovement];
         this.deerMovement += 1;
+
       }
+    }
+    if(this.direction > 0){
+      this.x1 = this.x;
+      this.y1 = this.y;
     }
     
   }
 
   display(){
     push();
-    translate(this.x, this.y);
+    translate(this.x1, this.y1);
     rotate(this.rotate);
     image(this.image, 0, 0, 120, 80);
     pop();
@@ -100,5 +113,17 @@ class Deer{
     this.directionSet();
     this.move();
     this.display();
+  }
+  kill(){
+    this.direction = 0;
+    this.image = deadDeer;
+    this.x = 2000;
+    this.y = 2000;
+
+    this.deadTimer += 1;
+
+    // if(deadTimer === 180){
+    //   deers.splice();
+    // }
   }
 }
