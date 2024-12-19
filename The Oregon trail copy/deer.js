@@ -122,8 +122,8 @@ class Deer{
 
     this.deadTimer += 1;
 
-    // if(deadTimer === 180){
-    //   deers.splice();
-    // }
+    if(deadTimer === 180){
+      deers.splice();
+    }
   }
 }
