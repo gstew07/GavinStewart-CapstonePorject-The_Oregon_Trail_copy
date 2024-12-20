@@ -94,16 +94,12 @@ class Deer{
 
       }
     }
-    if(this.direction > 0){
-      this.x1 = this.x;
-      this.y1 = this.y;
-    }
     
   }
 
   display(){
     push();
-    translate(this.x1, this.y1);
+    translate(this.x, this.y);
     rotate(this.rotate);
     image(this.image, 0, 0, 120, 80);
     pop();
@@ -117,13 +113,7 @@ class Deer{
   kill(){
     this.direction = 0;
     this.image = deadDeer;
-    this.x = 2000;
-    this.y = 2000;
 
     this.deadTimer += 1;
-
-    if(deadTimer === 180){
-      deers.splice();
-    }
   }
 }

@@ -10,13 +10,13 @@ let titleFade = 1, startFade = 0, startFadeTime = 0;
 let screenCode = 2, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
 
-let cTime = 5; 
+let cTime = 5;
 let cInterval = 0.002;
-let deadDeer, deerMovement = 0, deerTime = 0;
+let deadDeer, deerMovement = 0, deerTime = 0, timer;
 let deerImages = [];
 let deers = [];
-let deerLoaded = false;
-let hunter, bullets = [];
+let gameDone = false;
+let hunter, bullets = [], deerKilled;
 
 
 function preload() {
@@ -30,13 +30,13 @@ function preload() {
   }
 
   deadDeer = loadImage("assets/deadDeer.png");
-  for(let i = 1; i < 6; i++){
-    deerImages.push(loadImage("assets/nDeerDown"+i+".png"));
-    
+  for (let i = 1; i < 6; i++) {
+    deerImages.push(loadImage("assets/nDeerDown" + i + ".png"));
+
   }
-  
-  for(let i = 1; i < 6; i++){
-    deerImages.push(loadImage("assets/nDeerUp"+i+".png"));
+
+  for (let i = 1; i < 6; i++) {
+    deerImages.push(loadImage("assets/nDeerUp" + i + ".png"));
   }
   deerLoaded = true;
 }
@@ -45,8 +45,8 @@ function setup() {
   createCanvas(1900, 1000);
   textFont(font);
   textAlign(CENTER, CENTER);
+
   angleMode(DEGREES);
-  print(width, height);
 }
 
 function draw() {
@@ -102,7 +102,7 @@ function titleScreen() {
 function startVillage() {
   rotateBackground1(mountains, inverseMountains, grassGround, 2);
 
-  
+
 
 }
 
@@ -118,7 +118,7 @@ function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolli
   drawWagon(3 * width / 5, changeWagon);
 
   if (position <= 0 - rate) {
-    if (frameCount % int(8/(rate/2)) === 0) {
+    if (frameCount % int(8 / (rate / 2)) === 0) {
       changeWagon += 1;
       if (changeWagon > 4) {
         changeWagon = 0;
@@ -161,53 +161,87 @@ function drawWagon(x, change) {
   image(wagon[change], x, 6 * height / 7 - 260, 540, 360);
 }
 
-function huntingGame(){
-  imageMode(CENTER);
-  background(17, 150, 28);
+function huntingGame() {
+  if (gameDone === false) {
+    imageMode(CENTER);
+    background(17, 150, 28);
 
-  addDeer();
+    if (deerTime % 60 === 0) {
+      timer = (5 - (deerTime / 60));
+    }
+    if (timer === 0) {
+      gameDone = true;
+    }
 
-  hunter = new Hunter(width/2, height/2);
-  hunter.display();
+    addDeer();
 
-  for(let b of bullets){
-    b.display();
-    b.move();
+    hunter = new Hunter(width / 2, height / 2);
+    hunter.display();
 
-    b.hit();
+    for (let b of bullets) {
+      b.display();
+      b.move();
+
+      b.hit();
+    }
+
+
+    print(deerTime);
+
+    miniGameTimer(":" + timer);
+
   }
-  
-  
+
+
 }
 
-function addDeer(){
-  
-  if(deerTime % (5*60) === 0){
-    let numOfDeers = int(random(1,4));
-    for(let i = 0; i < numOfDeers; i++){
-      deers.push(new Deer(random(10, width-10), random(10, height-10), int(random(2,5)), deerMovement));
+function addDeer() {
+
+  if (deerTime % (5 * 60) === 0) {
+    let numOfDeers = int(random(1, 4));
+    for (let i = 0; i < numOfDeers; i++) {
+      deers.push(new Deer(random(10, width - 10), random(10, height - 10), int(random(2, 5)), deerMovement));
     }
   }
-  
-  for( let d of deers ){
-    if(d.direction > 0){
+
+  for (let i = 0; i < deers.length; i++) {
+    let d = deers[i];
+    if (d.direction > 0) {
       d.move();
       d.directionSet();
     }
-    
-    
+
+
     d.display();
     // print(d);
-    
+
+    if (d.deadTimer > 0) {
+      d.deadTimer += 1;
+      if (d.deadTimer === 180) {
+        deers.splice(i, 1);
+      }
+    }
+
+
   }
 
   deerTime += 1;
 }
-function deerDead(x, y){
+function deerDead(x, y) {
   image(deadDeer, x, y);
 }
 
-function mouseClicked(){
+function mouseClicked() {
   hunter.action();
+}
+
+function miniGameTimer(time) {
+  textSize(40);
+  fill(0);
+  text(time, width - 30, 37);
+
+  fill(255);
+  text(time, width - 30, 30);
+
 }
 

@@ -1,31 +1,31 @@
-class Bullet{
-  constructor(x, y){
+class Bullet {
+  constructor(x, y) {
     this.x = x;
     this.y = y;
     this.speed = 20;
     this.yChange = 0;
 
-    if(mouseY <= this.y){
-      this.direction = -atan((mouseX - this.x)/ (mouseY-this.y));
+    if (mouseY <= this.y) {
+      this.direction = -atan((mouseX - this.x) / (mouseY - this.y));
     }
-    else if( mouseY > this.y){
-      this.direction = -atan((mouseX - this.x)/ (mouseY-this.y)) + 180;
+    else if (mouseY > this.y) {
+      this.direction = -atan((mouseX - this.x) / (mouseY - this.y)) + 180;
     }
-    if(abs(this.direction) === 90){
+    if (abs(this.direction) === 90) {
       this.direction *= -1;
     }
     // print(this.direction);
   }
-  move(){
+  move() {
     this.yChange -= this.speed;
 
-    
-    if(this.yChange*sin(this.direction) < -(width - this.x) || this.yChange*cos(this.direction) > height - this.y || this.yChange*sin(this.direction) > this.x || this.yChange*cos(this.direction) < -this.y){
+
+    if (this.yChange * sin(this.direction) < -(width - this.x) || this.yChange * cos(this.direction) > height - this.y || this.yChange * sin(this.direction) > this.x || this.yChange * cos(this.direction) < -this.y) {
       bullets.splice(0, 1);
     }
   }
 
-  display(){
+  display() {
     push();
     translate(this.x, this.y);
     rotate(this.direction);
@@ -35,12 +35,15 @@ class Bullet{
 
     pop();
   }
-  hit(){
-    for(let d of deers){
-      if(abs((this.x - this.yChange*sin(this.direction)) - d.x) < 40 && abs((this.y + this.yChange*cos(this.direction))- d.y) < 40){
-        d.kill();
-        bullets.splice(0, 1);
+  hit() {
+    for (let d of deers) {
+      if (d.direction > 0) {
+        if (abs((this.x - this.yChange * sin(this.direction)) - d.x) < 40 && abs((this.y + this.yChange * cos(this.direction)) - d.y) < 40) {
+          d.kill();
+          bullets.splice(0, 1);
+        }
       }
+
     }
 
   }
