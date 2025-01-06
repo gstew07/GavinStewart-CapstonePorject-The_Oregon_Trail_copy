@@ -26,5 +26,9 @@ class Hunter{
     triangle(0, -20, -20, 20, 20, 20);
     pop();
   }
+  gameOver(){
+    fill(255);
+    triangle(this.x, this.y - 20, this.x - 20, this.y + 20, this.x + 20, this.y + 20);
+  }
 }
 

@@ -102,8 +102,6 @@ function titleScreen() {
 function startVillage() {
   rotateBackground1(mountains, inverseMountains, grassGround, 2);
 
-
-
 }
 
 function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolling background
@@ -167,7 +165,7 @@ function huntingGame() {
     background(17, 150, 28);
 
     if (deerTime % 60 === 0) {
-      timer = (5 - (deerTime / 60));
+      timer = (1 - (deerTime / 60));
     }
     if (timer === 0) {
       gameDone = true;
@@ -189,6 +187,37 @@ function huntingGame() {
     print(deerTime);
 
     miniGameTimer(":" + timer);
+
+  }
+  if(gameDone){
+    background(17, 150, 28);
+    for (let d of deers) {
+      d.display();
+    }
+    hunter.gameOver();
+    background(0,0,0, 100);
+
+    textSize(70);
+    fill(0);
+    text("GAME OVER", width/2, height/6 + 7);
+
+    fill(255);
+    text("GAME OVER", width/2, height/6);
+
+    textSize(40);
+    fill(0);
+    text("DEER KILLED: " + 5, width/2, 2*height/6 + 7);
+
+    fill(255);
+    text("DEER KILLED: " + 5, width/2, 2*height/6);
+
+    textSize(40);
+    fill(0);
+    text("MEAT COLLECTED: " + 50, width/2, 2*height/6 + 77);
+
+    fill(255);
+    text("MEAT COLLECTED: " + 50, width/2, 2*height/6 + 70);
+
 
   }
 
