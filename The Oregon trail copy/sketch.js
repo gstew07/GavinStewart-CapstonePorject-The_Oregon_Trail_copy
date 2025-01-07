@@ -7,8 +7,9 @@
 
 let mainBackground, font;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
-let screenCode = 2, backgroundPos = 0, totalChange, groundChange, position = 0;
+let screenCode = 0, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
+let doneMoving = false;
 
 let cTime = 5;
 let cInterval = 0.002;
@@ -38,7 +39,6 @@ function preload() {
   for (let i = 1; i < 6; i++) {
     deerImages.push(loadImage("assets/nDeerUp" + i + ".png"));
   }
-  deerLoaded = true;
 }
 
 function setup() {
@@ -52,7 +52,7 @@ function setup() {
 function draw() {
   background(220);
   if (screenCode === 0) titleScreen();
-  if (screenCode === 1) startVillage();
+  if (screenCode === 1) mountainBiome();
   if (screenCode === 2) huntingGame();
 
 }
@@ -88,19 +88,20 @@ function titleScreen() {
     fill(255, 255, 255, fade);
     text("PRESS SPACE TO START", width / 2, 3 * height / 4);
     if (keyIsPressed && key === " ") {
-      screenCode = 1;
-      backgroundPos = -(5 * 2) * width;
-      position += backgroundPos;
-      totalChange = 0;
-      groundChange = 2 * position;
+      setBackgroundVariables(1, 1);
 
     }
 
   }
 }
 
-function startVillage() {
-  rotateBackground1(mountains, inverseMountains, grassGround, 2);
+function mountainBiome() {
+  rotateBackground1(mountains, inverseMountains, grassGround, 20);
+  if(doneMoving){
+    huntQuestion();
+    
+
+  }
 
 }
 
@@ -110,7 +111,8 @@ function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolli
   if (position <= 0 - rate) {
     position += rate;
     totalChange += rate;
-    groundChange += 2 * rate;
+    groundChange += 2 * rate; // changes the ground at twice the rate
+    print(groundChange);
   }
 
   drawWagon(3 * width / 5, changeWagon);
@@ -125,6 +127,7 @@ function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolli
   }
   else {
     changeWagon = 0;
+    doneMoving = true;
   }
 }
 
@@ -155,6 +158,16 @@ function rotateBackground2(image1, image2, image3, xPosition, ground, direction)
   }
 }
 
+function setBackgroundVariables(code, length) { //code is the num associated with the location and mode
+  screenCode = code;
+  backgroundPos = -(length * 2) * width; // the length of the total scrolling background lengths (constant)
+  position += backgroundPos; //the value that changes so I can move the background along
+  totalChange = 0; // the total change of the background
+  groundChange = 2 * position; // the variable set for the ground so it is double the length
+
+  doneMoving = false;
+}
+
 function drawWagon(x, change) {
   image(wagon[change], x, 6 * height / 7 - 260, 540, 360);
 }
@@ -165,7 +178,7 @@ function huntingGame() {
     background(17, 150, 28);
 
     if (deerTime % 60 === 0) {
-      timer = (1 - (deerTime / 60));
+      timer = (30 - (deerTime / 60));
     }
     if (timer === 0) {
       gameDone = true;
@@ -189,34 +202,34 @@ function huntingGame() {
     miniGameTimer(":" + timer);
 
   }
-  if(gameDone){
+  if (gameDone) {
     background(17, 150, 28);
     for (let d of deers) {
       d.display();
     }
     hunter.gameOver();
-    background(0,0,0, 100);
+    background(0, 0, 0, 100);
 
     textSize(70);
     fill(0);
-    text("GAME OVER", width/2, height/6 + 7);
+    text("GAME OVER", width / 2, height / 6 + 7);
 
     fill(255);
-    text("GAME OVER", width/2, height/6);
+    text("GAME OVER", width / 2, height / 6);
 
     textSize(40);
     fill(0);
-    text("DEER KILLED: " + 5, width/2, 2*height/6 + 7);
+    text("DEER KILLED: " + 5, width / 2, 2 * height / 6 + 7);
 
     fill(255);
-    text("DEER KILLED: " + 5, width/2, 2*height/6);
+    text("DEER KILLED: " + 5, width / 2, 2 * height / 6);
 
     textSize(40);
     fill(0);
-    text("MEAT COLLECTED: " + 50, width/2, 2*height/6 + 77);
+    text("MEAT COLLECTED: " + 50, width / 2, 2 * height / 6 + 77);
 
     fill(255);
-    text("MEAT COLLECTED: " + 50, width/2, 2*height/6 + 70);
+    text("MEAT COLLECTED: " + 50, width / 2, 2 * height / 6 + 70);
 
 
   }
@@ -271,6 +284,37 @@ function miniGameTimer(time) {
 
   fill(255);
   text(time, width - 30, 30);
+
+}
+
+function huntQuestion(){
+  background(0,0,0, 100);
+  textSize(70);
+  fill(0);
+  text("WANT TO HUNT?", width / 2, height / 6 + 7);
+
+  fill(255);
+  text("WANT TO HUNT?", width / 2, height / 6);
+
+  textSize(40);
+  fill(0);
+  text("YOU WILL LOSE ONE DAY.", width / 2, height / 4 + 7);
+
+  fill(255);
+  text("YOU WILL LOSE ONE DAY.", width / 2, height / 4);
+
+  if(mouseY < height/2 + 69.5 && mouseY > height/2 - 62.5){
+    if(mouseX > 2*width/5 - (width/6 - 30)/2 && mouseX < 2*width/5 + (width/6 -30)/2){
+      let y1 = height/2 + 7;
+    }
+  }
+
+  rectMode(CENTER);
+  fill(0);
+  rect(2*width/5, height/2 + 7, width/6 - 30, 125, 10, 10, 10, 10);
+  fill(255);
+  rect(2*width/5, height/2, width/6 - 30, 125, 10, 10, 10, 10);
+  
 
 }
 
