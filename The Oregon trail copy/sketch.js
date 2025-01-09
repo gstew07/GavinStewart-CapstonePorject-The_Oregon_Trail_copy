@@ -7,7 +7,7 @@
 
 let mainBackground, font;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
-let screenCode = 0, backgroundPos = 0, totalChange, groundChange, position = 0;
+let screenCode = 2.1, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
 let doneMoving = false;
 
@@ -47,13 +47,14 @@ function setup() {
   textAlign(CENTER, CENTER);
 
   angleMode(DEGREES);
+  stroke(0); strokeWeight(5);
 }
 
 function draw() {
   background(220);
-  if (screenCode === 0) titleScreen();
-  if (screenCode === 1) mountainBiome();
-  if (screenCode === 2) huntingGame();
+  if (int(screenCode) === 0) titleScreen();
+  if (int(screenCode) === 1) mountainBiome();
+  if (int(screenCode) === 2) huntingGame();
 
 }
 
@@ -86,7 +87,9 @@ function titleScreen() {
 
     textSize(60);
     fill(255, 255, 255, fade);
+    noStroke();
     text("PRESS SPACE TO START", width / 2, 3 * height / 4);
+    stroke(0);
     if (keyIsPressed && key === " ") {
       setBackgroundVariables(1, 1);
 
@@ -97,10 +100,8 @@ function titleScreen() {
 
 function mountainBiome() {
   rotateBackground1(mountains, inverseMountains, grassGround, 20);
-  if(doneMoving){
+  if (doneMoving) {
     huntQuestion();
-    
-
   }
 
 }
@@ -173,67 +174,134 @@ function drawWagon(x, change) {
 }
 
 function huntingGame() {
-  if (gameDone === false) {
-    imageMode(CENTER);
-    background(17, 150, 28);
+  if (screenCode === 2.1) {
+    preHunting();
+  }
+  else if (screenCode === 2.2) {
+    if (gameDone === false) {
+      imageMode(CENTER);
+      background(17, 150, 28);
 
-    if (deerTime % 60 === 0) {
-      timer = (30 - (deerTime / 60));
+      if (deerTime % 60 === 0) {
+        timer = 30 - (deerTime / 60);
+      }
+      if (timer === 0) {
+        gameDone = true;
+      }
+
+      addDeer();
+
+      hunter = new Hunter(width / 2, height / 2);
+      hunter.display();
+
+      for (let b of bullets) {
+        b.display();
+        b.move();
+
+        b.hit();
+      }
+
+
+      print(deerTime);
+
+      miniGameTimer(":" + timer);
+
     }
-    if (timer === 0) {
-      gameDone = true;
+    if (gameDone) {
+      background(17, 150, 28);
+      for (let d of deers) {
+        d.display();
+      }
+      hunter.gameOver();
+      background(0, 0, 0, 100);
+
+      textSize(70);
+      fill(0);
+      text("GAME OVER", width / 2, height / 6 + 7);
+
+      fill(255);
+      text("GAME OVER", width / 2, height / 6);
+
+      textSize(40);
+      fill(0);
+      text("DEER KILLED: " + 5, width / 2, 2 * height / 6 + 7);
+
+      fill(255);
+      text("DEER KILLED: " + 5, width / 2, 2 * height / 6);
+
+      textSize(40);
+      fill(0);
+      text("MEAT COLLECTED: " + 50, width / 2, 2 * height / 6 + 77);
+
+      fill(255);
+      text("MEAT COLLECTED: " + 50, width / 2, 2 * height / 6 + 70);
+
+
     }
+  }
 
-    addDeer();
+}
 
-    hunter = new Hunter(width / 2, height / 2);
-    hunter.display();
+function preHunting() {
+  background(17, 150, 28);
 
-    for (let b of bullets) {
-      b.display();
-      b.move();
+  hunter = new Hunter(width / 2, height / 2);
+  hunter.gameOver();
 
-      b.hit();
-    }
+  background(0, 0, 0, 100);
+
+  textSize(70);
+  fill(0);
+  text("DEER HUNTING", width / 2, height / 6 + 7);
+
+  fill(255);
+  text("DEER HUNTING", width / 2, height / 6);
+
+  textSize(40);
+  fill(0);
+  text("GOAL: KILL AS MANY DEER AS POSSIBLE IN 30 SECONDS", width / 2, 2 * height / 6 + 7);
+
+  fill(255);
+  text("GOAL: KILL AS MANY DEER AS POSSIBLE IN 30 SECONDS", width / 2, 2 * height / 6);
+
+  textSize(40);
+  fill(0);
+  text("CONTROLS: ", width / 2, 2 * height / 6 + 77);
+
+  fill(255);
+  text("CONTROLS: ", width / 2, 2 * height / 6 + 70);
+
+  let controls = ["W: UP", "S: DOWN", "A: LEFT", "D: RIGHT", "LEFT CLICK: SHOT"];
+
+  for (let i = 1; i <= controls.length; i++) {
+    textSize(30);
+    text(controls[i - 1], width / 2, 2 * height / 6 + 90 + i * 45);
+  }
 
 
-    print(deerTime);
+  if (startFadeTime === 0 && startFade < 1) {
+    startFade += 0.02;
+  }
+  else if (startFadeTime === 0) {
+    startFadeTime = 1;
+  }
+  if (startFadeTime === 1 && startFade > 0) {
+    startFade -= 0.02;
+  }
+  else if (startFadeTime === 1) {
+    startFadeTime = 0;
+  }
+  let fade = map(startFade, 0, 1, 0, 255);
 
-    miniGameTimer(":" + timer);
+  textSize(60);
+  fill(255, 255, 255, fade);
+  noStroke();
+  text("PRESS SPACE TO START", width / 2, 3 * height / 4);
+  stroke(0);
+  if (keyIsPressed && key === " ") {
+    screenCode = 2.2;
 
   }
-  if (gameDone) {
-    background(17, 150, 28);
-    for (let d of deers) {
-      d.display();
-    }
-    hunter.gameOver();
-    background(0, 0, 0, 100);
-
-    textSize(70);
-    fill(0);
-    text("GAME OVER", width / 2, height / 6 + 7);
-
-    fill(255);
-    text("GAME OVER", width / 2, height / 6);
-
-    textSize(40);
-    fill(0);
-    text("DEER KILLED: " + 5, width / 2, 2 * height / 6 + 7);
-
-    fill(255);
-    text("DEER KILLED: " + 5, width / 2, 2 * height / 6);
-
-    textSize(40);
-    fill(0);
-    text("MEAT COLLECTED: " + 50, width / 2, 2 * height / 6 + 77);
-
-    fill(255);
-    text("MEAT COLLECTED: " + 50, width / 2, 2 * height / 6 + 70);
-
-
-  }
-
 
 }
 
@@ -287,8 +355,8 @@ function miniGameTimer(time) {
 
 }
 
-function huntQuestion(){
-  background(0,0,0, 100);
+function huntQuestion() {
+  background(0, 0, 0, 100);
   textSize(70);
   fill(0);
   text("WANT TO HUNT?", width / 2, height / 6 + 7);
@@ -302,19 +370,51 @@ function huntQuestion(){
 
   fill(255);
   text("YOU WILL LOSE ONE DAY.", width / 2, height / 4);
+  let y1, y2, f1, f2;
+  if (mouseY < height / 2 + 69.5 && mouseY > height / 2 - 62.5) {
+    if (mouseX > 2 * width / 5 - (width / 6 - 30) / 2 && mouseX < 2 * width / 5 + (width / 6 - 30) / 2) {
+      y1 = height / 2 + 7; f1 = 100;
+      y2 = height / 2; f2 = 255;
 
-  if(mouseY < height/2 + 69.5 && mouseY > height/2 - 62.5){
-    if(mouseX > 2*width/5 - (width/6 - 30)/2 && mouseX < 2*width/5 + (width/6 -30)/2){
-      let y1 = height/2 + 7;
     }
+    else if (mouseX > 3 * width / 5 - (width / 6 - 30) / 2 && mouseX < 3 * width / 5 + (width / 6 - 30) / 2) {
+      y1 = height / 2; f1 = 255;
+      y2 = height / 2 + 7; f2 = 100;
+    }
+    else {
+      y1 = height / 2; f1 = 255;
+      y2 = height / 2; f2 = 255;
+    }
+  }
+  else {
+    y1 = height / 2; f1 = 255;
+    y2 = height / 2; f2 = 255;
   }
 
   rectMode(CENTER);
+  textSize(70);
   fill(0);
-  rect(2*width/5, height/2 + 7, width/6 - 30, 125, 10, 10, 10, 10);
+  rect(2 * width / 5, height / 2 + 7, width / 6 - 30, 125, 10, 10, 10, 10);
+  fill(255, 255, 255, f1);
+  rect(2 * width / 5, y1, width / 6 - 30, 125, 10, 10, 10, 10);
+
   fill(255);
-  rect(2*width/5, height/2, width/6 - 30, 125, 10, 10, 10, 10);
-  
+  stroke(0); strokeWeight(7);
+  text("NO", 2 * width / 5, y1);
+
+  fill(0);
+  rect(3 * width / 5, height / 2 + 7, width / 6 - 30, 125, 10, 10, 10, 10);
+  fill(255, 255, 255, f2);
+  rect(3 * width / 5, y2, width / 6 - 30, 125, 10, 10, 10, 10);
+
+  fill(255);
+  stroke(0); strokeWeight(7);
+  text("YES", 3 * width / 5, y2);
+
+  if (mouseIsPressed && f2 === 100) {
+    screenCode = 2.1;
+  }
+
 
 }
 
