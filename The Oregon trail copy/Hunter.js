@@ -4,8 +4,10 @@ class Hunter{
     this.y = y;
   }
   action(){
-    
-    bullets.push(new Bullet(this.x, this.y));
+    if(bulletsLeft > 0){
+      bullets.push(new Bullet(this.x, this.y));
+      bulletsLeft -= 1;
+    }
     
   }
   display(){

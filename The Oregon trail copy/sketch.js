@@ -17,7 +17,7 @@ let deadDeer, deerMovement = 0, deerTime = 0, timer;
 let deerImages = [];
 let deers = [];
 let gameDone = false;
-let hunter, bullets = [], deerKilled;
+let hunter, bullets = [], deerKilled, deersKilled, meatCollected, bulletsLeft;
 
 
 function preload() {
@@ -202,9 +202,10 @@ function huntingGame() {
       }
 
 
-      print(deerTime);
+      // print(deerTime);
 
       miniGameTimer(":" + timer);
+      miniGameVariables();
 
     }
     if (gameDone) {
@@ -224,17 +225,19 @@ function huntingGame() {
 
       textSize(40);
       fill(0);
-      text("DEER KILLED: " + 5, width / 2, 2 * height / 6 + 7);
+      text("DEER KILLED: " + deersKilled, width / 2, 2 * height / 6 + 7);
 
       fill(255);
-      text("DEER KILLED: " + 5, width / 2, 2 * height / 6);
+      text("DEER KILLED: " + deersKilled, width / 2, 2 * height / 6);
+
+      meatCollected = deersKilled*10;
 
       textSize(40);
       fill(0);
-      text("MEAT COLLECTED: " + 50, width / 2, 2 * height / 6 + 77);
+      text("MEAT COLLECTED: " + meatCollected, width / 2, 2 * height / 6 + 77);
 
       fill(255);
-      text("MEAT COLLECTED: " + 50, width / 2, 2 * height / 6 + 70);
+      text("MEAT COLLECTED: " + meatCollected, width / 2, 2 * height / 6 + 70);
 
 
     }
@@ -300,7 +303,8 @@ function preHunting() {
   stroke(0);
   if (keyIsPressed && key === " ") {
     screenCode = 2.2;
-
+    deersKilled = 22;
+    bulletsLeft = 20;
   }
 
 }
@@ -320,7 +324,9 @@ function addDeer() {
       d.move();
       d.directionSet();
     }
-
+    if(d.x > width || d.x < 0 || d.y > height || d.y < 0){
+      deers.splice(i, 1);
+    }
 
     d.display();
     // print(d);
@@ -352,6 +358,37 @@ function miniGameTimer(time) {
 
   fill(255);
   text(time, width - 30, 30);
+
+}
+
+function miniGameVariables() {
+  push();
+  translate(30, 50);
+  rotate(-45);
+  image(deadDeer, 0, 0, 100, 75);
+  pop();
+
+  textAlign(LEFT, CENTER);
+  textSize(40);
+  fill(0);
+  text(": "+ deersKilled , 70, 57);
+
+  fill(255);
+  text(": "+ deersKilled, 70, 50);
+
+  strokeWeight(7);
+  triangle(170, 45, 160, 65, 180, 65);
+  strokeWeight(5);
+
+  
+  textSize(40);
+  fill(0);
+  text(": "+ bulletsLeft , 190, 57);
+
+  fill(255);
+  text(": "+ bulletsLeft, 190, 50);
+
+  textAlign(CENTER, CENTER);
 
 }
 
@@ -413,6 +450,7 @@ function huntQuestion() {
 
   if (mouseIsPressed && f2 === 100) {
     screenCode = 2.1;
+    
   }
 
 

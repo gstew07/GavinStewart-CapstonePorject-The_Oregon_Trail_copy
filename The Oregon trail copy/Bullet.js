@@ -41,6 +41,8 @@ class Bullet {
         if (abs((this.x - this.yChange * sin(this.direction)) - d.x) < 40 && abs((this.y + this.yChange * cos(this.direction)) - d.y) < 40) {
           d.kill();
           bullets.splice(0, 1);
+          deersKilled += 1;
+          print(deersKilled);
         }
       }
 
