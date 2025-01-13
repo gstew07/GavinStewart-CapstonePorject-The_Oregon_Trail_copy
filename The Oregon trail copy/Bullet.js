@@ -31,7 +31,8 @@ class Bullet {
     rotate(this.direction);
 
     fill(255);
-    triangle(0, this.yChange - 10, -5, this.yChange, 5, this.yChange);
+    image(bullet, 0, this.yChange, 20, 20);
+    // triangle(0, this.yChange - 10, -5, this.yChange, 5, this.yChange);
 
     pop();
   }

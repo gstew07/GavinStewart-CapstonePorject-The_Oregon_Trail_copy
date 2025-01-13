@@ -17,7 +17,7 @@ let deadDeer, deerMovement = 0, deerTime = 0, timer;
 let deerImages = [];
 let deers = [];
 let gameDone = false;
-let hunter, bullets = [], deerKilled, deersKilled, meatCollected, bulletsLeft;
+let hunter, bullet, huntingBackground, bullets = [], deerKilled, deersKilled, meatCollected, bulletsLeft;
 
 
 function preload() {
@@ -39,6 +39,8 @@ function preload() {
   for (let i = 1; i < 6; i++) {
     deerImages.push(loadImage("assets/nDeerUp" + i + ".png"));
   }
+  bullet = loadImage("assets/bullet.png");
+  huntingBackground = loadImage("assets/hunting background.png");
 }
 
 function setup() {
@@ -179,8 +181,9 @@ function huntingGame() {
   }
   else if (screenCode === 2.2) {
     if (gameDone === false) {
+      
+      background(huntingBackground);
       imageMode(CENTER);
-      background(17, 150, 28);
 
       if (deerTime % 60 === 0) {
         timer = 30 - (deerTime / 60);
@@ -206,10 +209,10 @@ function huntingGame() {
 
       miniGameTimer(":" + timer);
       miniGameVariables();
-
+      imageMode(CORNER);
     }
     if (gameDone) {
-      background(17, 150, 28);
+      background(huntingBackground);
       for (let d of deers) {
         d.display();
       }
@@ -246,7 +249,7 @@ function huntingGame() {
 }
 
 function preHunting() {
-  background(17, 150, 28);
+  background(huntingBackground);
 
   hunter = new Hunter(width / 2, height / 2);
   hunter.gameOver();
@@ -377,7 +380,7 @@ function miniGameVariables() {
   text(": "+ deersKilled, 70, 50);
 
   strokeWeight(7);
-  triangle(170, 45, 160, 65, 180, 65);
+  image(bullet, 170, 55, 40, 40);
   strokeWeight(5);
 
   
