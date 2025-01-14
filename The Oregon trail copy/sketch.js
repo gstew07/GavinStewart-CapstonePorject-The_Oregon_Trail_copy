@@ -194,7 +194,7 @@ function huntingGame() {
 
       addDeer();
 
-      hunter = new Hunter(width / 2, height / 2);
+      hunter.move();
       hunter.display();
 
       for (let b of bullets) {
