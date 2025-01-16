@@ -306,7 +306,7 @@ function preHunting() {
   stroke(0);
   if (keyIsPressed && key === " ") {
     screenCode = 2.2;
-    deersKilled = 22;
+    deersKilled = 0;
     bulletsLeft = 20;
   }
 
