@@ -7,7 +7,7 @@
 
 let mainBackground, font;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
-let screenCode = 2.1, backgroundPos = 0, totalChange, groundChange, position = 0;
+let screenCode = 0, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
 let doneMoving = false;
 
@@ -23,6 +23,7 @@ let hunter, bullet, huntingBackground, bullets = [], deerKilled, deersKilled, me
 function preload() {
   mainBackground = loadImage("assets/mainBackground.jpg");
   mountains = loadImage("assets/mountains.jpg");
+  prettyMountain = loadImage("assets/prettyMountain1.png");
   inverseMountains = loadImage("assets/mountains2.jpg");
   grassGround = loadImage("assets/grassGround.png");
   font = loadFont("assets/pixelFont.ttf");
@@ -61,7 +62,7 @@ function draw() {
 }
 
 function titleScreen() {
-  background(mainBackground);
+  background(prettyMountain);
   titleFade += 3.5;
 
   textSize(70);
@@ -72,39 +73,53 @@ function titleScreen() {
   fill(24, 192, 47, titleFade);
   text("The Oregon Trail", width / 2, height / 8);
   if (titleFade > 300) {
-    if (startFadeTime === 0 && startFade < 1) {
-      startFade += 0.02;
-    }
-    else if (startFadeTime === 0) {
-      startFadeTime = 1;
-    }
-    if (startFadeTime === 1 && startFade > 0) {
-      startFade -= 0.02;
-    }
-    else if (startFadeTime === 1) {
-      startFadeTime = 0;
-    }
-
-    let fade = map(startFade, 0, 1, 0, 255);
-
-    textSize(60);
-    fill(255, 255, 255, fade);
-    noStroke();
-    text("PRESS SPACE TO START", width / 2, 3 * height / 4);
-    stroke(0);
+    fadeText("PRESS SPACE TO START");
     if (keyIsPressed && key === " ") {
-      setBackgroundVariables(1, 1);
+      setBackgroundVariables(1.1, 30);
 
     }
 
   }
 }
 
-function mountainBiome() {
-  rotateBackground1(mountains, inverseMountains, grassGround, 20);
-  if (doneMoving) {
-    huntQuestion();
+function fadeText(text1){
+  if (startFadeTime === 0 && startFade < 1) {
+    startFade += 0.02;
   }
+  else if (startFadeTime === 0) {
+    startFadeTime = 1;
+  }
+  if (startFadeTime === 1 && startFade > 0) {
+    startFade -= 0.02;
+  }
+  else if (startFadeTime === 1) {
+    startFadeTime = 0;
+  }
+  let fade = map(startFade, 0, 1, 0, 255);
+
+  textSize(60);
+  fill(255, 255, 255, fade);
+  noStroke();
+  text(text1, width / 2, 3 * height / 4);
+  stroke(0);
+}
+
+function mountainBiome() {
+  if(screenCode === 1.1){
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    if (doneMoving) {
+      huntQuestion();
+    }
+  }
+  if(screenCode === 1.2){
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    if (doneMoving) {
+      huntQuestion();
+    }
+  }
+
+
+  
 
 }
 
@@ -242,6 +257,12 @@ function huntingGame() {
       fill(255);
       text("MEAT COLLECTED: " + meatCollected, width / 2, 2 * height / 6 + 70);
 
+      fadeText("PRESS SPACE TO CONTINUE");
+
+      if(keyIsDown(32)){
+        setBackgroundVariables(1.2, 3);
+      }
+
 
     }
   }
@@ -277,7 +298,7 @@ function preHunting() {
   fill(255);
   text("CONTROLS: ", width / 2, 2 * height / 6 + 70);
 
-  let controls = ["W: UP", "S: DOWN", "A: LEFT", "D: RIGHT", "LEFT CLICK: SHOT"];
+  let controls = ["W: FORWARDS", "S: BACKWARDS", "*HUNTER AIMS TOWARDS MOUSE*","LEFT CLICK: SHOT"];
 
   for (let i = 1; i <= controls.length; i++) {
     textSize(30);
@@ -285,29 +306,12 @@ function preHunting() {
   }
 
 
-  if (startFadeTime === 0 && startFade < 1) {
-    startFade += 0.02;
-  }
-  else if (startFadeTime === 0) {
-    startFadeTime = 1;
-  }
-  if (startFadeTime === 1 && startFade > 0) {
-    startFade -= 0.02;
-  }
-  else if (startFadeTime === 1) {
-    startFadeTime = 0;
-  }
-  let fade = map(startFade, 0, 1, 0, 255);
-
-  textSize(60);
-  fill(255, 255, 255, fade);
-  noStroke();
-  text("PRESS SPACE TO START", width / 2, 3 * height / 4);
-  stroke(0);
+  fadeText("PRESS SPACE TO START");
   if (keyIsPressed && key === " ") {
     screenCode = 2.2;
     deersKilled = 0;
     bulletsLeft = 20;
+    gameDone = false;
   }
 
 }
@@ -453,6 +457,10 @@ function huntQuestion() {
 
   if (mouseIsPressed && f2 === 100) {
     screenCode = 2.1;
+    
+  }
+  if (mouseIsPressed && f1 === 100) {
+    setBackgroundVariables(1.2, 3);
     
   }
 
