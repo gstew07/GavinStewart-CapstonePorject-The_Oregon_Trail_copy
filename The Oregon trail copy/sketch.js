@@ -6,9 +6,11 @@
 // - describe what you did to take this project "above and beyond"
 
 let mainBackground, font;
+let riverOpening, sunsetMountain, yellowstone, mountainMeadow;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
 let screenCode = 0, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
+let sign;
 let doneMoving = false;
 
 let cTime = 5;
@@ -21,11 +23,15 @@ let hunter, bullet, huntingBackground, bullets = [], deerKilled, deersKilled, me
 
 
 function preload() {
-  mainBackground = loadImage("assets/mainBackground.jpg");
+  mainBackground = loadImage("assets/oregonTrail.png");
+  riverOpening = loadImage("assets/riverOpening.jpg");
   mountains = loadImage("assets/mountains.jpg");
-  prettyMountain = loadImage("assets/prettyMountain1.png");
+  sunsetMountain = loadImage("assets/sunsetMountain.jpg");
+  yellowstone = loadImage("assets/yellowstone.jpg");
+  mountainMeadow = loadImage("assets/mountainMeadow.webp");
   inverseMountains = loadImage("assets/mountains2.jpg");
   grassGround = loadImage("assets/grassGround.png");
+  sign = loadImage("assets/sign.png");
   font = loadFont("assets/pixelFont.ttf");
   for (let i = 1; i < 6; i++) {
     wagon.push(loadImage("assets/Wagon" + i + ".png"));
@@ -51,6 +57,7 @@ function setup() {
 
   angleMode(DEGREES);
   stroke(0); strokeWeight(5);
+  print(windowWidth, windowHeight);
 }
 
 function draw() {
@@ -62,20 +69,21 @@ function draw() {
 }
 
 function titleScreen() {
-  background(prettyMountain);
+  background(mainBackground);
   titleFade += 3.5;
 
   textSize(70);
+  stroke(0,0,0,titleFade);
   textStyle(BOLD);
   fill(0, 0, 0, titleFade);
   text("The Oregon Trail", width / 2, height / 8 + 7);
 
-  fill(24, 192, 47, titleFade);
+  fill(147, 176, 255, titleFade);
   text("The Oregon Trail", width / 2, height / 8);
   if (titleFade > 300) {
     fadeText("PRESS SPACE TO START");
     if (keyIsPressed && key === " ") {
-      setBackgroundVariables(1.1, 30);
+      setBackgroundVariables(1.1, 3);
 
     }
 
@@ -106,7 +114,7 @@ function fadeText(text1){
 
 function mountainBiome() {
   if(screenCode === 1.1){
-    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    rotateBackground1(mountains, inverseMountains, grassGround, 3);
     if (doneMoving) {
       huntQuestion();
     }
@@ -132,6 +140,8 @@ function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolli
     groundChange += 2 * rate; // changes the ground at twice the rate
     print(groundChange);
   }
+
+  
 
   drawWagon(3 * width / 5, changeWagon);
 
@@ -163,7 +173,7 @@ function rotateBackground2(image1, image2, image3, xPosition, ground, direction)
     }
 
 
-
+    image(sign, ground + width/2, 6*height/7 - 70, 100, 150);
     for (let i = 0; i < 2; i++) {
       image(image3, ground + i * width / 2, 6 * height / 7, width / 2, height / 7);
     }

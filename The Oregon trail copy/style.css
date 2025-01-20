@@ -1,9 +1,11 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: rgb(17, 150, 28);
+  background-color: rgb(241, 234, 234);
 }
 
 canvas {
+  transform: translate(6,0);
   display: block;
+  
 }
