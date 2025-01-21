@@ -8,7 +8,7 @@
 let mainBackground, font;
 let riverOpening, sunsetMountain, yellowstone, mountainMeadow;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
-let screenCode = 0, backgroundPos = 0, totalChange, groundChange, position = 0;
+let screenCode = 2.1, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
 let sign;
 let doneMoving = false;
@@ -19,7 +19,7 @@ let deadDeer, deerMovement = 0, deerTime = 0, timer;
 let deerImages = [];
 let deers = [];
 let gameDone = false;
-let hunter, bullet, huntingBackground, bullets = [], deerKilled, deersKilled, meatCollected, bulletsLeft;
+let hunter, bullet, huntingBackground, bullets = [], deerKilled, deersKilled, meatCollected = 0, bulletsLeft;
 
 
 function preload() {
@@ -253,24 +253,26 @@ function huntingGame() {
 
       textSize(40);
       fill(0);
-      text("DEER KILLED: " + deersKilled, width / 2, 2 * height / 6 + 7);
+      text("SCORE " + deersKilled*10, width / 2, 2 * height / 6 + 7);
 
       fill(255);
-      text("DEER KILLED: " + deersKilled, width / 2, 2 * height / 6);
+      text("SCORE " + deersKilled*10, width / 2, 2 * height / 6);
 
-      meatCollected = deersKilled*10;
+      if(deersKilled*10 > meatCollected){
+        meatCollected = deersKilled*10;
+      }
 
       textSize(40);
       fill(0);
-      text("MEAT COLLECTED: " + meatCollected, width / 2, 2 * height / 6 + 77);
+      text("HIGH SCORE: " + meatCollected, width / 2, 2 * height / 6 + 77);
 
       fill(255);
-      text("MEAT COLLECTED: " + meatCollected, width / 2, 2 * height / 6 + 70);
+      text("HIGH SCORE " + meatCollected, width / 2, 2 * height / 6 + 70);
 
-      fadeText("PRESS SPACE TO CONTINUE");
+      fadeText("PRESS SPACE TO PLAY AGAIN");
 
       if(keyIsDown(32)){
-        setBackgroundVariables(1.2, 3);
+        screenCode = 2.2;
       }
 
 
