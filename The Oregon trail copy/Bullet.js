@@ -6,7 +6,7 @@ class Bullet {
     this.yChange = 0;
 
     if (mouseY <= this.y) {
-      this.direction = -atan((mouseX - this.x) / (mouseY - this.y));
+      this.direction = -atan((mouseX - this.x) / (mouseY - this.y)); // points the same way as the hunter with this code
     }
     else if (mouseY > this.y) {
       this.direction = -atan((mouseX - this.x) / (mouseY - this.y)) + 180;
@@ -21,7 +21,7 @@ class Bullet {
 
 
     if (this.yChange * sin(this.direction) < -(width - this.x) || this.yChange * cos(this.direction) > height - this.y || this.yChange * sin(this.direction) > this.x || this.yChange * cos(this.direction) < -this.y) {
-      bullets.splice(0, 1);
+      bullets.splice(0, 1); // removes bullet after it leaves the screen
     }
   }
 
@@ -36,7 +36,7 @@ class Bullet {
 
     pop();
   }
-  hit() {
+  hit() { // checks to see if the deer is within range to kill and I forgot about the dist() function when making this
     for (let d of deers) {
       if (d.direction > 0) {
         if (abs((this.x - this.yChange * sin(this.direction)) - d.x) < 40 && abs((this.y + this.yChange * cos(this.direction)) - d.y) < 40) {

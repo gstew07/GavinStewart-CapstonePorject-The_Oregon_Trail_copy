@@ -22,7 +22,7 @@ class Deer{
 
     this.deadTimer = 0;
 
-    if(x < width/2){
+    if(x < width/2){ // sets the direction the deer is moving in
       if(y < height/2){
         this.direction = 1;
       }
@@ -45,11 +45,11 @@ class Deer{
     this.xChange = this.speed*noise(this.cTime);
     this.yChange = this.speed - this.xChange;
 
-    switch(this.direction){
+    switch(this.direction){// with the direction  code it finds the way it wants to go
     case 1:
       this.x += this.xChange;
       this.y += this.yChange;
-      this.rotate = -atan(this.xChange/this.yChange);
+      this.rotate = -atan(this.xChange/this.yChange); // again uses inverse tan and noise to have a random path
       break;
     case 2:
       this.x += -this.xChange;
@@ -72,7 +72,7 @@ class Deer{
     this.cTime += this.cInterval;
   }
 
-  directionSet(){
+  directionSet(){ // updates to the right images for the direction it is going
     if(deerTime % 12 === 0){
       
   

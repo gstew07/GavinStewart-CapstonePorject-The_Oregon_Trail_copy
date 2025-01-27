@@ -13,7 +13,8 @@ let mapImage, deerSilhouette, mountainSilhouette, mapCode = 1.3;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
 let screenCode = 4, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
-let sign;
+let sign, tent, campfire;
+let campTime;
 let doneMoving = false;
 let numOfBullets = 25, poundsOfMeat = 50, medicine = 5, campingSupplies = 0, dollars = 25;
 
@@ -38,6 +39,8 @@ function preload() {
   inverseMountains = loadImage("assets/mountains2.jpg");
   grassGround = loadImage("assets/grassGround.png");
   sign = loadImage("assets/sign.png");
+  tent = loadImage("assets/tent.png");
+  campfire = loadImage("assets/campFire.png");
   mapImage = loadImage("assets/map.png");
   deerSilhouette = loadImage("assets/deerSilhouette.png")
   mountainSilhouette = loadImage("assets/mountainSilhouette.png")
@@ -76,6 +79,7 @@ function draw() {
   if (int(screenCode) === 2) huntingGame();
   if (int(screenCode) === 3) fortWallaWalla();
   if (int(screenCode) === 4) trailMap();
+  if (int(screenCode) === 5) camp();
 }
 
 function titleScreen() {
@@ -100,7 +104,7 @@ function titleScreen() {
   }
 }
 
-function fadeText(text1) {
+function fadeText(text1) { // sets up a faing text which adds esthetic
   if (startFadeTime === 0 && startFade < 1) {
     startFade += 0.02;
   }
@@ -122,7 +126,7 @@ function fadeText(text1) {
   stroke(0);
 }
 
-function trailMap() {
+function trailMap() { // map of the trail
   background(mapImage);
   line(1700, height / 2, 1400, 300); //connects all of the locations with lines
   line(1700, height / 2, 1400, 700);
@@ -146,29 +150,31 @@ function trailMap() {
   mapCircles(1700, height / 2, 0, 1.3);
 
   mapCircles(1400, 300, 1, 2.2);
-  mapCircles(1400, 700, 2, 2.4);
+  mapCircles(1400, 700, 2, 2.5);
 
   mapCircles(1100, 200, 2, 3.2);
   mapCircles(1100, height / 2, 1, 3.4);
-  mapCircles(1100, 800, 1, 3.5);
+  mapCircles(1100, 800, 1, 3.6);
 
   mapCircles(800, 300, 2, 4.3);
   mapCircles(800, 700, 2, 4.6);
 
   mapCircles(500, 300, 1, 5.2);
-  mapCircles(500, 700, 1, 5.5);
+  mapCircles(500, 700, 1, 5.6);
 
   mapCircles(200, height / 2, 6);
 }
 
 function mapCircles(x, y, image1, code) { // creates the circles for the locations on the map
   let nextLocation = false;
-  if(abs(code - (mapCode+1)) <= 0.21 || code*mapCode >= 31.2) nextLocation = true;
+  if(abs(code - (mapCode+1)) <= 0.21) nextLocation = true;
+  if(mapCode > 5 && code === 6) nextLocation = true;
   if (mouseX < x + 50 && mouseX > x - 50 && mouseY < y + 50 && mouseY > y - 50 && nextLocation) {
     fill(25, 160, 25);
     circle(x, y, 100);
     if(mouseIsPressed){
       mapCode = mapCode + 1 + code - (mapCode+1);
+      setBackgroundVariables(round(1 + code/10, 2), 1); // if you want to go through the game quicker you can change the 5 which is the length to like 1 or 2 because nothing happens in the travel parts
     }
 
   }
@@ -177,7 +183,7 @@ function mapCircles(x, y, image1, code) { // creates the circles for the locatio
     circle(x, y, 100);
   }
   else{
-    fill(25, 160, 25);
+    fill(25, 130, 25);
     circle(x, y, 100);
   }
   if (image1 === 1) { // the silhouettes inside the circles
@@ -188,7 +194,7 @@ function mapCircles(x, y, image1, code) { // creates the circles for the locatio
   }
 }
 
-function fortWallaWalla() {
+function fortWallaWalla() { // sets up the screens in Walla Walla explaining the game and the story and if I could've added it the store
   background(fortWW);
   screenTime += 1;
   if (screenCode === 3.2 || screenCode === 3.1) {
@@ -321,7 +327,7 @@ function fortWallaWalla() {
   }
   // }
 }
-function setStory() {
+function setStory() { // the story in fort Walla Walla
   if (screenCode === 3.1) {
     story = "Welcome Traveler, \n \n You are a farmer from Independence, Missouri who has sold all of his family's belongings to come find a new life in the Willmette Valley in Oregon Territory. You and your family have made it out of most of this grueling journey as you arived in Fort Walla Walla just 100 miles from Oregon City. You must stock up with supplies and make it to the Willmette Valley before winter hits in 15 days."
     if (keyIsPressed && key === " " && screenTime > 180) {
@@ -339,17 +345,75 @@ function setStory() {
 }
 
 
-function mountainBiome() {
-  if (screenCode === 1.1) {
-    rotateBackground1(mountains, inverseMountains, grassGround, 3);
+function mountainBiome() { // sets up each stretch of land before each location
+  if (screenCode === 1.22) {
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
     if (doneMoving) {
+      mapCode = 2.2;
       huntQuestion();
     }
   }
-  if (screenCode === 1.2) {
+  if (screenCode === 1.25) {
     rotateBackground1(mountains, inverseMountains, grassGround, 100);
     if (doneMoving) {
+      mapCode = 2.5;
+      campQuestion();
+    }
+  }
+  if (screenCode === 1.32) {
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    if (doneMoving) {
+      mapCode = 3.2;
+      campQuestion();
+    }
+  }
+  if (screenCode === 1.34) {
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    if (doneMoving) {
+      mapCode = 3.4;
       huntQuestion();
+    }
+  }
+  if (screenCode === 1.36) {
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    if (doneMoving) {
+      mapCode = 3.6;
+      huntQuestion();
+    }
+  }
+  if (screenCode === 1.43) {
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    if (doneMoving) {
+      mapCode = 4.3
+      campQuestion();
+    }
+  }
+  if (screenCode === 1.46) {
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    if (doneMoving) {
+      mapCode = 4.6;
+      campQuestion();
+    }
+  }
+  if (screenCode === 1.52) {
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    if (doneMoving) {
+      mapCode = 5.2;
+      huntQuestion();
+    }
+  }
+  if (screenCode === 1.56) {
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    if (doneMoving) {
+      mapCode = 5.6;
+      huntQuestion();
+    }
+  }
+  if (screenCode === 1.6) {
+    rotateBackground1(mountains, inverseMountains, grassGround, 100);
+    if (doneMoving) {
+      mapCode = 6;
+      campQuestion();
     }
   }
 
@@ -427,7 +491,7 @@ function drawWagon(x, change) {
   image(wagon[change], x, 6 * height / 7 - 260, 540, 360);
 }
 
-function huntingGame() {
+function huntingGame() { // hunting game using classes 
   if (screenCode === 2.1) {
     preHunting();
   }
@@ -463,7 +527,7 @@ function huntingGame() {
       miniGameVariables();
       imageMode(CORNER);
     }
-    if (gameDone) {
+    if (gameDone) { // the code for the screen after the game
       background(huntingBackground);
       for (let d of deers) {
         d.display();
@@ -499,7 +563,7 @@ function huntingGame() {
       fadeText("PRESS SPACE TO PLAY AGAIN");
 
       if (keyIsDown(32)) {
-        screenCode = 2.2;
+        screenCode = 4;
       }
 
 
@@ -508,7 +572,7 @@ function huntingGame() {
 
 }
 
-function preHunting() {
+function preHunting() { // sets up the pre-hunting screen
   background(huntingBackground);
 
   hunter = new Hunter(width / 2, height / 2);
@@ -557,7 +621,7 @@ function preHunting() {
 
 function addDeer() {
 
-  if (deerTime % (5 * 60) === 0) {
+  if (deerTime % (5 * 60) === 0) { // adds deer every few seconds
     let numOfDeers = int(random(1, 4));
     for (let i = 0; i < numOfDeers; i++) {
       deers.push(new Deer(random(10, width - 10), random(10, height - 10), int(random(2, 5)), deerMovement));
@@ -609,7 +673,7 @@ function miniGameTimer(time) {
 
 }
 
-function miniGameVariables() {
+function miniGameVariables() { // sets the hunt variables
   push();
   translate(30, 50);
   rotate(-45);
@@ -640,7 +704,7 @@ function miniGameVariables() {
 
 }
 
-function huntQuestion() {
+function huntQuestion() { //asks if you want to hunt using buttons
   background(0, 0, 0, 100);
   textSize(70);
   fill(0);
@@ -648,6 +712,72 @@ function huntQuestion() {
 
   fill(255);
   text("WANT TO HUNT?", width / 2, height / 6);
+
+  textSize(40);
+  fill(0);
+  text("YOU WILL LOSE ONE DAY.", width / 2, height / 4 + 7);
+
+  fill(255);
+  text("YOU WILL LOSE ONE DAY.", width / 2, height / 4);
+  let y1, y2, f1, f2;
+  if (mouseY < height / 2 + 69.5 && mouseY > height / 2 - 62.5) {// checks if you're over the button
+    if (mouseX > 2 * width / 5 - (width / 6 - 30) / 2 && mouseX < 2 * width / 5 + (width / 6 - 30) / 2) {
+      y1 = height / 2 + 7; f1 = 100;
+      y2 = height / 2; f2 = 255;
+
+    }
+    else if (mouseX > 3 * width / 5 - (width / 6 - 30) / 2 && mouseX < 3 * width / 5 + (width / 6 - 30) / 2) {
+      y1 = height / 2; f1 = 255;
+      y2 = height / 2 + 7; f2 = 100;
+    }
+    else {
+      y1 = height / 2; f1 = 255;
+      y2 = height / 2; f2 = 255;
+    }
+  }
+  else {
+    y1 = height / 2; f1 = 255;
+    y2 = height / 2; f2 = 255;
+  }
+
+  rectMode(CENTER);
+  textSize(70);
+  fill(0);
+  rect(2 * width / 5, height / 2 + 7, width / 6 - 30, 125, 10, 10, 10, 10);
+  fill(255, 255, 255, f1);
+  rect(2 * width / 5, y1, width / 6 - 30, 125, 10, 10, 10, 10);
+
+  fill(255);
+  stroke(0); strokeWeight(7);
+  text("NO", 2 * width / 5, y1);
+
+  fill(0);
+  rect(3 * width / 5, height / 2 + 7, width / 6 - 30, 125, 10, 10, 10, 10);
+  fill(255, 255, 255, f2);
+  rect(3 * width / 5, y2, width / 6 - 30, 125, 10, 10, 10, 10);
+
+  fill(255);
+  stroke(0); strokeWeight(7);
+  text("YES", 3 * width / 5, y2);
+
+  if (mouseIsPressed && f2 === 100) {
+    screenCode = 2.1;
+  }
+  if (mouseIsPressed && f1 === 100) {
+    screenCode = 4;
+  }
+
+
+}
+
+function campQuestion(){ //smae code as the hunting question but for the camping spots
+  background(0, 0, 0, 100);
+  textSize(70);
+  fill(0);
+  text("WANT TO REST?", width / 2, height / 6 + 7);
+
+  fill(255);
+  text("WANT TO REST?", width / 2, height / 6);
 
   textSize(40);
   fill(0);
@@ -697,12 +827,85 @@ function huntQuestion() {
   text("YES", 3 * width / 5, y2);
 
   if (mouseIsPressed && f2 === 100) {
-    screenCode = 2.1;
+    screenCode = 5;
+    campTime = 1;
   }
   if (mouseIsPressed && f1 === 100) {
-    setBackgroundVariables(1.2, 3);
+    screenCode = 4
   }
-
-
 }
 
+function camp(){ // creates a background for you to see and rest at
+  if(mapCode === 2.5){
+    background(riverOpening);
+    image(campfire, 800, 800, 100, 100);
+    image(tent, 900, 700, 210, 174)
+    background(0, 0, 0, abs(campTime)/2);
+    campTime += 1; 
+    if(campTime === 510) campTime = -510;// adds a fade to night and back
+    if(campTime === 0){
+      campTime = -1;
+      textSize(70);
+      fill(255);
+      text("you lost one day and are well rested", 950, 250);
+      fadeText("press space to Continue");
+      if(keyIsPressed && key === " "){
+        screenCode = 4;
+      }
+    }
+  }
+  if(mapCode === 3.2){ 
+    background(yellowstone);
+    image(campfire, 750, 700, 90, 90);
+    image(tent, 900, 650, 140, 116);
+    background(0, 0, 0, abs(campTime)/2);
+    campTime += 1;
+    if(campTime === 510) campTime = -510;
+    if(campTime === 0){
+      campTime = -1;
+      textSize(70);
+      fill(255);
+      text("you lost one day and are well rested", 950, 250);
+      fadeText("press space to Continue");
+      if(keyIsPressed && key === " "){
+        screenCode = 4;
+      }
+    }
+  }
+  if(mapCode === 4.3){
+    background(sunsetMountain);
+    image(campfire, 800, 800, 100, 100);
+    image(tent, 900, 700, 210, 174)
+    background(0, 0, 0, abs(campTime)/2);
+    campTime += 1;
+    if(campTime === 510) campTime = -510;
+    if(campTime === 0){
+      campTime = -1;
+      textSize(70);
+      fill(255);
+      text("you lost one day and are well rested", 950, 250);
+      fadeText("press space to Continue");
+      if(keyIsPressed && key === " "){
+        screenCode = 4;
+      }
+    }
+  }
+  if(mapCode === 4.6){
+    background(mountainMeadow);
+    image(campfire, 1050, 650, 25, 25);
+    image(tent, 1100, 600, 70, 58);
+    background(0, 0, 0, abs(campTime)/2);
+    campTime += 1;
+    if(campTime === 510) campTime = -510;
+    if(campTime === 0){
+      campTime = -1;
+      textSize(70);
+      fill(255);
+      text("you lost one day and are well rested", 950, 250);
+      fadeText("press space to Continue");
+      if(keyIsPressed && key === " "){
+        screenCode = 4;
+      }
+    }
+  }
+}

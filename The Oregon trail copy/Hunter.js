@@ -8,7 +8,7 @@ class Hunter {
     this.xD = 1;
   }
   action() {
-    if (bulletsLeft > 0) {
+    if (bulletsLeft > 0) { // spawns bullets when mouse is pressed with a function in sketch
       bullets.push(new Bullet(this.x, this.y));
       bulletsLeft -= 1;
     }
@@ -18,7 +18,7 @@ class Hunter {
     push();
     translate(this.x, this.y);
     if (mouseY <= this.y) {
-      rotate(-atan((mouseX - this.x) / (mouseY - this.y)));
+      rotate(-atan((mouseX - this.x) / (mouseY - this.y)));// uses inverse tan math to create rotation
       this.change = atan(abs(mouseX - this.x) / abs(mouseY - this.y)) / 90;
       this.yD = -1;
 
@@ -43,13 +43,13 @@ class Hunter {
     else this.xD = 1;
 
     if (keyIsDown(65) || keyIsDown(87) || keyIsDown(83) || keyIsDown(68)) {
-      if (key === "w") {
+      if (key === "w") { //moves in the direction of the mouse
         print(this.change);
         this.x += this.xD * (3 * this.change);
         this.y += this.yD * (3 - 3 * this.change);
 
       }
-      if (key === "s") {
+      if (key === "s") {// moves against the direction of the mouse
         this.x += -this.xD * (3 * this.change);
         this.y += -this.yD * (3 - 3 * this.change);
 
