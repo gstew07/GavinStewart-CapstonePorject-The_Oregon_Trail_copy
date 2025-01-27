@@ -7,11 +7,13 @@
 
 let mainBackground, font;
 let riverOpening, sunsetMountain, yellowstone, mountainMeadow;
+let fortWW, store, story, screenTime;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
-let screenCode = 2.1, backgroundPos = 0, totalChange, groundChange, position = 0;
+let screenCode = 0, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
 let sign;
 let doneMoving = false;
+let numOfBullets = 25, poundsOfMeat = 50, medicine = 5, campingSupplies = 0, dollars = 25;
 
 let cTime = 5;
 let cInterval = 0.002;
@@ -24,6 +26,8 @@ let hunter, bullet, huntingBackground, bullets = [], deerKilled, deersKilled, me
 
 function preload() {
   mainBackground = loadImage("assets/oregonTrail.png");
+  fortWW = loadImage("assets/FortWallaWalla.avif");
+  store = loadImage("assets/store.webp");
   riverOpening = loadImage("assets/riverOpening.jpg");
   mountains = loadImage("assets/mountains.jpg");
   sunsetMountain = loadImage("assets/sunsetMountain.jpg");
@@ -65,6 +69,7 @@ function draw() {
   if (int(screenCode) === 0) titleScreen();
   if (int(screenCode) === 1) mountainBiome();
   if (int(screenCode) === 2) huntingGame();
+  if (int(screenCode) === 3) fortWallaWalla();
 
 }
 
@@ -73,7 +78,7 @@ function titleScreen() {
   titleFade += 3.5;
 
   textSize(70);
-  stroke(0,0,0,titleFade);
+  stroke(0, 0, 0, titleFade);
   textStyle(BOLD);
   fill(0, 0, 0, titleFade);
   text("The Oregon Trail", width / 2, height / 8 + 7);
@@ -83,14 +88,14 @@ function titleScreen() {
   if (titleFade > 300) {
     fadeText("PRESS SPACE TO START");
     if (keyIsPressed && key === " ") {
-      setBackgroundVariables(1.1, 3);
-
+      screenCode = 3.4;
+      screenTime = 0;
     }
 
   }
 }
 
-function fadeText(text1){
+function fadeText(text1) {
   if (startFadeTime === 0 && startFade < 1) {
     startFade += 0.02;
   }
@@ -112,14 +117,160 @@ function fadeText(text1){
   stroke(0);
 }
 
+function fortWallaWalla() {
+  background(fortWW);
+  if (screenCode === 3.2 || screenCode === 3.1) {
+    background(0, 0, 0, 100);
+
+    fill(0, 0, 0, 150);
+    stroke(255);
+    rectMode(CORNER);
+    rect(150, 100, 1600, 800, 50);
+
+    stroke(0);
+    fill(255);
+    setStory();
+    textSize(40); textWrap(WORD); textAlign(CORNER, CORNER); textLeading(60);
+    text(story, 200, 150, 1500);
+    text("Space to continue >", 1200, 860)
+    textAlign(CENTER, CENTER);
+  }
+  if (screenCode === 3.3) {
+    textAlign(CENTER, CENTER);
+    let y1, y2, f1, f2;
+    if (mouseY < height && mouseY > height - 150) {
+      if (mouseX > 0 && mouseX < 300) {
+        y1 = height - 75; f1 = 100;
+        y2 = height - 82; f2 = 255;
+
+      }
+      else if (mouseX > width - 300 && mouseX < width) {
+        y1 = height - 82; f1 = 255;
+        y2 = height - 85; f2 = 100;
+      }
+      else {
+        y1 = height - 82; f1 = 255;
+        y2 = height - 82; f2 = 255;
+      }
+    }
+    else {
+      y1 = height - 82; f1 = 255;
+      y2 = height - 82; f2 = 255;
+    }
+
+    rectMode(CENTER);
+    textSize(50);
+    noStroke();
+    fill(0);
+    rect(150, y1 + 7, 300, 150, 10);
+    fill(28, 53, 45, f1);
+    rect(150, y1, 300, 150, 10);
+
+    fill(255);
+    stroke(0); strokeWeight(7);
+    text("< START", 150, y1);
+
+    fill(0);
+    noStroke();
+    rect(width - 150, y2 + 7, 300, 150, 10);
+    fill(28, 53, 45, f2);
+    rect(width-150  , y2, 300, 150, 10);
+
+    fill(255);
+    stroke(0); strokeWeight(7);
+    text("STORE", width - 150, y2);
+
+    if (mouseIsPressed && f2 === 100) {
+      screenCode = 3.4;
+    }
+    if (mouseIsPressed && f1 === 100) {
+      setBackgroundVariables(1.1, 3);
+    }
+  }
+  if(screenCode === 3.4){
+    background(store);
+    textSize(50);
+    text("Click on the item you want to buy", width/2, 100)
+
+    textAlign(CENTER, CENTER);
+    let y1, y2, f1, f2;
+    if (mouseY < height && mouseY > height - 150) {
+      if (mouseX > 0 && mouseX < 300) {
+        y1 = height - 75; f1 = 100;
+        y2 = height - 82; f2 = 255;
+
+      }
+      else if (mouseX > width - 300 && mouseX < width) {
+        y1 = height - 82; f1 = 255;
+        y2 = height - 85; f2 = 100;
+      }
+      else {
+        y1 = height - 82; f1 = 255;
+        y2 = height - 82; f2 = 255;
+      }
+    }
+    else {
+      y1 = height - 82; f1 = 255;
+      y2 = height - 82; f2 = 255;
+    }
+
+    rectMode(CENTER);
+    textSize(40);
+    noStroke();
+    fill(0);
+    rect(150, y1 + 7, 300, 150, 10);
+    fill(28, 53, 45, f1);
+    rect(150, y1, 300, 150, 10);
+
+    fill(255);
+    stroke(0); strokeWeight(7);
+    text("Purchase", 150, y1);
+
+    fill(0);
+    noStroke();
+    rect(width - 150, y2 + 7, 300, 150, 10);
+    fill(28, 53, 45, f2);
+    rect(width-150  , y2, 300, 150, 10);
+
+    fill(255);
+    stroke(0); strokeWeight(7);
+    text("Cancel", width - 150, y2);
+
+    if (mouseIsPressed && f2 === 100) {
+      screenCode = 3.3;
+    }
+    if (mouseIsPressed && f1 === 100) {
+      screenCode = 3.3;
+    }
+  }
+}
+function setStory() {
+  screenTime += 1;
+  if (screenCode === 3.1) {
+    story = "Welcome Traveler, \n \n You are a farmer from Independence, Missouri who has sold all of his family's belongings to come find a new life in the Willmette Valley in Oregon Territory. You and your family have made it out of most of this grueling journey as you arived in Fort Walla Walla just 100 miles from Oregon City. You must stock up with supplies and make it to the Willmette Valley before winter hits in 15 days."
+    if (keyIsPressed && key === " " && screenTime > 180) {
+      screenCode = 3.2;
+      screenTime = 0;
+    }
+  }
+
+  if (screenCode === 3.2) {
+    story = "\n You have arived with 50lbs of meat, 25 bullets, 5 camping supplies, 5 medicine, and 25 dollars. You can go to the store and stock up or you can start on your journey. \n \n use the map to choose locations to travel to like hunting spots or camp set ups \n \n your money, items, and time left will be counted to a score at the end."
+    if (keyIsPressed && key === " " && screenTime > 180) {
+      screenCode = 3.3;
+    }
+  }
+}
+
+
 function mountainBiome() {
-  if(screenCode === 1.1){
+  if (screenCode === 1.1) {
     rotateBackground1(mountains, inverseMountains, grassGround, 3);
     if (doneMoving) {
       huntQuestion();
     }
   }
-  if(screenCode === 1.2){
+  if (screenCode === 1.2) {
     rotateBackground1(mountains, inverseMountains, grassGround, 100);
     if (doneMoving) {
       huntQuestion();
@@ -127,7 +278,7 @@ function mountainBiome() {
   }
 
 
-  
+
 
 }
 
@@ -141,7 +292,7 @@ function rotateBackground1(image1, image2, image3, rate) { //sets up the scrolli
     print(groundChange);
   }
 
-  
+
 
   drawWagon(3 * width / 5, changeWagon);
 
@@ -173,7 +324,7 @@ function rotateBackground2(image1, image2, image3, xPosition, ground, direction)
     }
 
 
-    image(sign, ground + width/2, 6*height/7 - 70, 100, 150);
+    image(sign, ground + width / 2, 6 * height / 7 - 70, 100, 150);
     for (let i = 0; i < 2; i++) {
       image(image3, ground + i * width / 2, 6 * height / 7, width / 2, height / 7);
     }
@@ -206,7 +357,7 @@ function huntingGame() {
   }
   else if (screenCode === 2.2) {
     if (gameDone === false) {
-      
+
       background(huntingBackground);
       imageMode(CENTER);
 
@@ -253,13 +404,13 @@ function huntingGame() {
 
       textSize(40);
       fill(0);
-      text("SCORE " + deersKilled*10, width / 2, 2 * height / 6 + 7);
+      text("SCORE " + deersKilled * 10, width / 2, 2 * height / 6 + 7);
 
       fill(255);
-      text("SCORE " + deersKilled*10, width / 2, 2 * height / 6);
+      text("SCORE " + deersKilled * 10, width / 2, 2 * height / 6);
 
-      if(deersKilled*10 > meatCollected){
-        meatCollected = deersKilled*10;
+      if (deersKilled * 10 > meatCollected) {
+        meatCollected = deersKilled * 10;
       }
 
       textSize(40);
@@ -271,7 +422,7 @@ function huntingGame() {
 
       fadeText("PRESS SPACE TO PLAY AGAIN");
 
-      if(keyIsDown(32)){
+      if (keyIsDown(32)) {
         screenCode = 2.2;
       }
 
@@ -310,7 +461,7 @@ function preHunting() {
   fill(255);
   text("CONTROLS: ", width / 2, 2 * height / 6 + 70);
 
-  let controls = ["W: FORWARDS", "S: BACKWARDS", "*HUNTER AIMS TOWARDS MOUSE*","LEFT CLICK: SHOT"];
+  let controls = ["W: FORWARDS", "S: BACKWARDS", "*HUNTER AIMS TOWARDS MOUSE*", "LEFT CLICK: SHOT"];
 
   for (let i = 1; i <= controls.length; i++) {
     textSize(30);
@@ -343,7 +494,7 @@ function addDeer() {
       d.move();
       d.directionSet();
     }
-    if(d.x > width || d.x < 0 || d.y > height || d.y < 0){
+    if (d.x > width || d.x < 0 || d.y > height || d.y < 0) {
       deers.splice(i, 1);
     }
 
@@ -390,22 +541,22 @@ function miniGameVariables() {
   textAlign(LEFT, CENTER);
   textSize(40);
   fill(0);
-  text(": "+ deersKilled , 70, 57);
+  text(": " + deersKilled, 70, 57);
 
   fill(255);
-  text(": "+ deersKilled, 70, 50);
+  text(": " + deersKilled, 70, 50);
 
   strokeWeight(7);
   image(bullet, 170, 55, 40, 40);
   strokeWeight(5);
 
-  
+
   textSize(40);
   fill(0);
-  text(": "+ bulletsLeft , 190, 57);
+  text(": " + bulletsLeft, 190, 57);
 
   fill(255);
-  text(": "+ bulletsLeft, 190, 50);
+  text(": " + bulletsLeft, 190, 50);
 
   textAlign(CENTER, CENTER);
 
@@ -469,11 +620,9 @@ function huntQuestion() {
 
   if (mouseIsPressed && f2 === 100) {
     screenCode = 2.1;
-    
   }
   if (mouseIsPressed && f1 === 100) {
     setBackgroundVariables(1.2, 3);
-    
   }
 
 
