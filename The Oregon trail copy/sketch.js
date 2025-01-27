@@ -8,8 +8,9 @@
 let mainBackground, font;
 let riverOpening, sunsetMountain, yellowstone, mountainMeadow;
 let fortWW, store, story, screenTime;
+let mapImage, deerSilhouette, mountainSilhouette;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
-let screenCode = 0, backgroundPos = 0, totalChange, groundChange, position = 0;
+let screenCode = 4, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
 let sign;
 let doneMoving = false;
@@ -20,7 +21,7 @@ let cInterval = 0.002;
 let deadDeer, deerMovement = 0, deerTime = 0, timer;
 let deerImages = [];
 let deers = [];
-let gameDone = false;
+let gameDone = true;
 let hunter, bullet, huntingBackground, bullets = [], deerKilled, deersKilled, meatCollected = 0, bulletsLeft;
 
 
@@ -36,6 +37,9 @@ function preload() {
   inverseMountains = loadImage("assets/mountains2.jpg");
   grassGround = loadImage("assets/grassGround.png");
   sign = loadImage("assets/sign.png");
+  mapImage = loadImage("assets/map.png");
+  deerSilhouette = loadImage("assets/deerSilhouette.png")
+  mountainSilhouette = loadImage("assets/mountainSilhouette.png")
   font = loadFont("assets/pixelFont.ttf");
   for (let i = 1; i < 6; i++) {
     wagon.push(loadImage("assets/Wagon" + i + ".png"));
@@ -70,7 +74,7 @@ function draw() {
   if (int(screenCode) === 1) mountainBiome();
   if (int(screenCode) === 2) huntingGame();
   if (int(screenCode) === 3) fortWallaWalla();
-
+  if (int(screenCode) === 4) trailMap();
 }
 
 function titleScreen() {
@@ -88,7 +92,7 @@ function titleScreen() {
   if (titleFade > 300) {
     fadeText("PRESS SPACE TO START");
     if (keyIsPressed && key === " ") {
-      screenCode = 3.4;
+      screenCode = 3.1;
       screenTime = 0;
     }
 
@@ -117,8 +121,66 @@ function fadeText(text1) {
   stroke(0);
 }
 
+function trailMap(){
+  background(mapImage);
+  line(1700, height/2, 1400, 300); //connects all of the locations with lines
+  line(1700, height/2, 1400, 700);
+
+  line(1400, 700, 1100, 800);
+  line(1400, 700, 1100, 500);
+  line(1400, 300, 1100, 200);
+  line(1400, 300, 1100, 500);
+
+  line(1100, 200, 800, 300);
+  line(1100, 500, 800, 300);
+  line(1100, 500, 800, 700);
+  line(1100, 800, 800, 700);
+
+  line(800, 300, 500, 300);
+  line(800, 700, 500, 700)
+  
+  line(500, 300, 200, 500);
+  line(500, 700, 200, 500);
+  
+  mapCircles(1700, height/2, 0);
+
+  mapCircles(1400, 300, 1);
+  mapCircles(1400, 700, 2);
+
+  mapCircles(1100, 200, 2);
+  mapCircles(1100, height/2, 1);
+  mapCircles(1100, 800, 1);
+
+  mapCircles(800, 300, 2);
+  mapCircles(800, 700, 2);
+
+  mapCircles(500, 300, 1);
+  mapCircles(500, 700, 1);
+
+  mapCircles(200, height/2);
+}
+
+function mapCircles(x, y, image1){ // creates the circles for the locations on the map
+  if(mouseX < x+50 && mouseX > x-50 && mouseY < y + 50 && mouseY > y - 50){
+    fill(25, 160, 25);
+    circle(x, y, 100);
+    
+  }
+  else{
+    fill(45,196,45);
+    circle(x, y, 100);  
+  }
+  if(image1 === 1){
+    image(deerSilhouette, x - 50, y - 50, 100, 100);
+  }
+  else if(image1 === 2){
+    image(mountainSilhouette, x - 45, y - 30, 90, 60);
+  }
+}
+
 function fortWallaWalla() {
   background(fortWW);
+  screenTime += 1;
   if (screenCode === 3.2 || screenCode === 3.1) {
     background(0, 0, 0, 100);
 
@@ -182,70 +244,74 @@ function fortWallaWalla() {
 
     if (mouseIsPressed && f2 === 100) {
       screenCode = 3.4;
+      screenTime = 0;
     }
     if (mouseIsPressed && f1 === 100) {
-      setBackgroundVariables(1.1, 3);
+      screenCode = 4;
     }
   }
   if(screenCode === 3.4){
-    background(store);
-    textSize(50);
-    text("Click on the item you want to buy", width/2, 100)
-
-    textAlign(CENTER, CENTER);
-    let y1, y2, f1, f2;
-    if (mouseY < height && mouseY > height - 150) {
-      if (mouseX > 0 && mouseX < 300) {
-        y1 = height - 75; f1 = 100;
-        y2 = height - 82; f2 = 255;
-
-      }
-      else if (mouseX > width - 300 && mouseX < width) {
-        y1 = height - 82; f1 = 255;
-        y2 = height - 85; f2 = 100;
-      }
-      else {
-        y1 = height - 82; f1 = 255;
-        y2 = height - 82; f2 = 255;
-      }
-    }
-    else {
-      y1 = height - 82; f1 = 255;
-      y2 = height - 82; f2 = 255;
-    }
-
-    rectMode(CENTER);
-    textSize(40);
-    noStroke();
-    fill(0);
-    rect(150, y1 + 7, 300, 150, 10);
-    fill(28, 53, 45, f1);
-    rect(150, y1, 300, 150, 10);
-
-    fill(255);
-    stroke(0); strokeWeight(7);
-    text("Purchase", 150, y1);
-
-    fill(0);
-    noStroke();
-    rect(width - 150, y2 + 7, 300, 150, 10);
-    fill(28, 53, 45, f2);
-    rect(width-150  , y2, 300, 150, 10);
-
-    fill(255);
-    stroke(0); strokeWeight(7);
-    text("Cancel", width - 150, y2);
-
-    if (mouseIsPressed && f2 === 100) {
+    text("sorry no store yet", width/2, height/2)
+    if(screenTime > 120){
       screenCode = 3.3;
     }
-    if (mouseIsPressed && f1 === 100) {
-      screenCode = 3.3;
-    }
-  }
+  //   background(store);
+  //   textSize(50);
+  //   text("Click on the item you want to buy", width/2, 100)
+
+  //   textAlign(CENTER, CENTER);
+  //   let y1, y2, f1, f2;
+  //   if (mouseY < height && mouseY > height - 150) {
+  //     if (mouseX > 0 && mouseX < 300) {
+  //       y1 = height - 75; f1 = 100;
+  //       y2 = height - 82; f2 = 255;
+
+  //     }
+  //     else if (mouseX > width - 300 && mouseX < width) {
+  //       y1 = height - 82; f1 = 255;
+  //       y2 = height - 85; f2 = 100;
+  //     }
+  //     else {
+  //       y1 = height - 82; f1 = 255;
+  //       y2 = height - 82; f2 = 255;
+  //     }
+  //   }
+  //   else {
+  //     y1 = height - 82; f1 = 255;
+  //     y2 = height - 82; f2 = 255;
+  //   }
+
+  //   rectMode(CENTER);
+  //   textSize(40);
+  //   noStroke();
+  //   fill(0);
+  //   rect(150, y1 + 7, 300, 150, 10);
+  //   fill(28, 53, 45, f1);
+  //   rect(150, y1, 300, 150, 10);
+
+  //   fill(255);
+  //   stroke(0); strokeWeight(7);
+  //   text("Purchase", 150, y1);
+
+  //   fill(0);
+  //   noStroke();
+  //   rect(width - 150, y2 + 7, 300, 150, 10);
+  //   fill(28, 53, 45, f2);
+  //   rect(width-150  , y2, 300, 150, 10);
+
+  //   fill(255);
+  //   stroke(0); strokeWeight(7);
+  //   text("Cancel", width - 150, y2);
+
+  //   if (mouseIsPressed && f2 === 100) {
+  //     screenCode = 3.3;
+  //   }
+  //   if (mouseIsPressed && f1 === 100) {
+  //     screenCode = 3.3;
+   }
+  // }
 }
 function setStory() {
-  screenTime += 1;
   if (screenCode === 3.1) {
     story = "Welcome Traveler, \n \n You are a farmer from Independence, Missouri who has sold all of his family's belongings to come find a new life in the Willmette Valley in Oregon Territory. You and your family have made it out of most of this grueling journey as you arived in Fort Walla Walla just 100 miles from Oregon City. You must stock up with supplies and make it to the Willmette Valley before winter hits in 15 days."
     if (keyIsPressed && key === " " && screenTime > 180) {
@@ -518,7 +584,9 @@ function deerDead(x, y) {
 }
 
 function mouseClicked() {
-  hunter.action();
+  if(gameDone === false){
+    hunter.action();
+  }
 }
 
 function miniGameTimer(time) {
