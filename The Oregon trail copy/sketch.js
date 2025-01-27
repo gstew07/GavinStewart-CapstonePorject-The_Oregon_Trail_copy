@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 // Project Title
 // Your Name
 // Date
@@ -8,7 +9,7 @@
 let mainBackground, font;
 let riverOpening, sunsetMountain, yellowstone, mountainMeadow;
 let fortWW, store, story, screenTime;
-let mapImage, deerSilhouette, mountainSilhouette;
+let mapImage, deerSilhouette, mountainSilhouette, mapCode = 1.3;
 let titleFade = 1, startFade = 0, startFadeTime = 0;
 let screenCode = 4, backgroundPos = 0, totalChange, groundChange, position = 0;
 let wagon = [], changeWagon = 0;
@@ -121,10 +122,10 @@ function fadeText(text1) {
   stroke(0);
 }
 
-function trailMap(){
+function trailMap() {
   background(mapImage);
-  line(1700, height/2, 1400, 300); //connects all of the locations with lines
-  line(1700, height/2, 1400, 700);
+  line(1700, height / 2, 1400, 300); //connects all of the locations with lines
+  line(1700, height / 2, 1400, 700);
 
   line(1400, 700, 1100, 800);
   line(1400, 700, 1100, 500);
@@ -137,43 +138,52 @@ function trailMap(){
   line(1100, 800, 800, 700);
 
   line(800, 300, 500, 300);
-  line(800, 700, 500, 700)
-  
+  line(800, 700, 500, 700);
+
   line(500, 300, 200, 500);
   line(500, 700, 200, 500);
-  
-  mapCircles(1700, height/2, 0);
 
-  mapCircles(1400, 300, 1);
-  mapCircles(1400, 700, 2);
+  mapCircles(1700, height / 2, 0, 1.3);
 
-  mapCircles(1100, 200, 2);
-  mapCircles(1100, height/2, 1);
-  mapCircles(1100, 800, 1);
+  mapCircles(1400, 300, 1, 2.2);
+  mapCircles(1400, 700, 2, 2.4);
 
-  mapCircles(800, 300, 2);
-  mapCircles(800, 700, 2);
+  mapCircles(1100, 200, 2, 3.2);
+  mapCircles(1100, height / 2, 1, 3.4);
+  mapCircles(1100, 800, 1, 3.5);
 
-  mapCircles(500, 300, 1);
-  mapCircles(500, 700, 1);
+  mapCircles(800, 300, 2, 4.3);
+  mapCircles(800, 700, 2, 4.6);
 
-  mapCircles(200, height/2);
+  mapCircles(500, 300, 1, 5.2);
+  mapCircles(500, 700, 1, 5.5);
+
+  mapCircles(200, height / 2, 6);
 }
 
-function mapCircles(x, y, image1){ // creates the circles for the locations on the map
-  if(mouseX < x+50 && mouseX > x-50 && mouseY < y + 50 && mouseY > y - 50){
+function mapCircles(x, y, image1, code) { // creates the circles for the locations on the map
+  let nextLocation = false;
+  if(abs(code - (mapCode+1)) <= 0.21 || code*mapCode >= 31.2) nextLocation = true;
+  if (mouseX < x + 50 && mouseX > x - 50 && mouseY < y + 50 && mouseY > y - 50 && nextLocation) {
     fill(25, 160, 25);
     circle(x, y, 100);
-    
+    if(mouseIsPressed){
+      mapCode = mapCode + 1 + code - (mapCode+1);
+    }
+
+  }
+  else if(nextLocation) {
+    fill(45, 196, 45);
+    circle(x, y, 100);
   }
   else{
-    fill(45,196,45);
-    circle(x, y, 100);  
+    fill(25, 160, 25);
+    circle(x, y, 100);
   }
-  if(image1 === 1){
+  if (image1 === 1) { // the silhouettes inside the circles
     image(deerSilhouette, x - 50, y - 50, 100, 100);
   }
-  else if(image1 === 2){
+  else if (image1 === 2) {
     image(mountainSilhouette, x - 45, y - 30, 90, 60);
   }
 }
@@ -236,7 +246,7 @@ function fortWallaWalla() {
     noStroke();
     rect(width - 150, y2 + 7, 300, 150, 10);
     fill(28, 53, 45, f2);
-    rect(width-150  , y2, 300, 150, 10);
+    rect(width - 150, y2, 300, 150, 10);
 
     fill(255);
     stroke(0); strokeWeight(7);
@@ -250,65 +260,65 @@ function fortWallaWalla() {
       screenCode = 4;
     }
   }
-  if(screenCode === 3.4){
-    text("sorry no store yet", width/2, height/2)
-    if(screenTime > 120){
+  if (screenCode === 3.4) {
+    text("sorry no store yet", width / 2, height / 2)
+    if (screenTime > 120) {
       screenCode = 3.3;
     }
-  //   background(store);
-  //   textSize(50);
-  //   text("Click on the item you want to buy", width/2, 100)
+    //   background(store);
+    //   textSize(50);
+    //   text("Click on the item you want to buy", width/2, 100)
 
-  //   textAlign(CENTER, CENTER);
-  //   let y1, y2, f1, f2;
-  //   if (mouseY < height && mouseY > height - 150) {
-  //     if (mouseX > 0 && mouseX < 300) {
-  //       y1 = height - 75; f1 = 100;
-  //       y2 = height - 82; f2 = 255;
+    //   textAlign(CENTER, CENTER);
+    //   let y1, y2, f1, f2;
+    //   if (mouseY < height && mouseY > height - 150) {
+    //     if (mouseX > 0 && mouseX < 300) {
+    //       y1 = height - 75; f1 = 100;
+    //       y2 = height - 82; f2 = 255;
 
-  //     }
-  //     else if (mouseX > width - 300 && mouseX < width) {
-  //       y1 = height - 82; f1 = 255;
-  //       y2 = height - 85; f2 = 100;
-  //     }
-  //     else {
-  //       y1 = height - 82; f1 = 255;
-  //       y2 = height - 82; f2 = 255;
-  //     }
-  //   }
-  //   else {
-  //     y1 = height - 82; f1 = 255;
-  //     y2 = height - 82; f2 = 255;
-  //   }
+    //     }
+    //     else if (mouseX > width - 300 && mouseX < width) {
+    //       y1 = height - 82; f1 = 255;
+    //       y2 = height - 85; f2 = 100;
+    //     }
+    //     else {
+    //       y1 = height - 82; f1 = 255;
+    //       y2 = height - 82; f2 = 255;
+    //     }
+    //   }
+    //   else {
+    //     y1 = height - 82; f1 = 255;
+    //     y2 = height - 82; f2 = 255;
+    //   }
 
-  //   rectMode(CENTER);
-  //   textSize(40);
-  //   noStroke();
-  //   fill(0);
-  //   rect(150, y1 + 7, 300, 150, 10);
-  //   fill(28, 53, 45, f1);
-  //   rect(150, y1, 300, 150, 10);
+    //   rectMode(CENTER);
+    //   textSize(40);
+    //   noStroke();
+    //   fill(0);
+    //   rect(150, y1 + 7, 300, 150, 10);
+    //   fill(28, 53, 45, f1);
+    //   rect(150, y1, 300, 150, 10);
 
-  //   fill(255);
-  //   stroke(0); strokeWeight(7);
-  //   text("Purchase", 150, y1);
+    //   fill(255);
+    //   stroke(0); strokeWeight(7);
+    //   text("Purchase", 150, y1);
 
-  //   fill(0);
-  //   noStroke();
-  //   rect(width - 150, y2 + 7, 300, 150, 10);
-  //   fill(28, 53, 45, f2);
-  //   rect(width-150  , y2, 300, 150, 10);
+    //   fill(0);
+    //   noStroke();
+    //   rect(width - 150, y2 + 7, 300, 150, 10);
+    //   fill(28, 53, 45, f2);
+    //   rect(width-150  , y2, 300, 150, 10);
 
-  //   fill(255);
-  //   stroke(0); strokeWeight(7);
-  //   text("Cancel", width - 150, y2);
+    //   fill(255);
+    //   stroke(0); strokeWeight(7);
+    //   text("Cancel", width - 150, y2);
 
-  //   if (mouseIsPressed && f2 === 100) {
-  //     screenCode = 3.3;
-  //   }
-  //   if (mouseIsPressed && f1 === 100) {
-  //     screenCode = 3.3;
-   }
+    //   if (mouseIsPressed && f2 === 100) {
+    //     screenCode = 3.3;
+    //   }
+    //   if (mouseIsPressed && f1 === 100) {
+    //     screenCode = 3.3;
+  }
   // }
 }
 function setStory() {
@@ -584,7 +594,7 @@ function deerDead(x, y) {
 }
 
 function mouseClicked() {
-  if(gameDone === false){
+  if (gameDone === false) {
     hunter.action();
   }
 }
